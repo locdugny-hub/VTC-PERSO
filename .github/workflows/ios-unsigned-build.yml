@@ -1,0 +1,32 @@
+# Construit un .ipa NON SIGNÉ du composant natif sur un runner macOS de GitHub (sans Mac personnel).
+# La signature se fait ensuite sur Windows avec un identifiant Apple gratuit (ex. Sideloadly) :
+# profil valable 7 jours, à resigner chaque semaine. Rien n'est publié sur l'App Store.
+# À vérifier au premier lancement : disponibilité d'un Xcode avec le SDK iOS 27 sur l'image du runner.
+name: ios-unsigned-build
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci && node shortcut/build-scriptable.mjs
+      - name: Sélection de Xcode (SDK iOS 27 requis)
+        run: |
+          ls /Applications | grep -i xcode
+          XC=$(ls -d /Applications/Xcode_27*.app 2>/dev/null | sort | tail -1)
+          if [ -z "$XC" ]; then echo "Aucun Xcode 27 sur ce runner : build impossible pour ScreenCaptureKit iOS"; exit 1; fi
+          sudo xcode-select -s "$XC"
+          xcodebuild -version
+      - run: brew install xcodegen
+      - run: cd native && xcodegen generate
+      - name: Archive non signée
+        run: |
+          cd native
+          xcodebuild -project VTCPerso.xcodeproj -scheme VTCPerso -configuration Release -sdk iphoneos \
+            -archivePath build/VTCPerso.xcarchive archive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+          mkdir -p build/Payload && cp -R build/VTCPerso.xcarchive/Products/Applications/VTCPerso.app build/Payload/
+          cd build && zip -qr VTCPerso-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with: { name: VTCPerso-unsigned-ipa, path: native/build/VTCPerso-unsigned.ipa, retention-days: 7 }

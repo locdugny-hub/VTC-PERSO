@@ -1,0 +1,17 @@
+{
+  "name": "VTC Perso",
+  "short_name": "VTC Perso",
+  "description": "Analyse personnelle des offres VTC, historique et bilans.",
+  "lang": "fr-FR",
+  "start_url": "./#/session",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b1120",
+  "theme_color": "#12346b",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

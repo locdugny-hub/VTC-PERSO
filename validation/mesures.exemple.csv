@@ -1,0 +1,5 @@
+# EXEMPLE FICTIF de format. Remplacez par vos essais réels (30 par plateforme minimum).
+essai;plateforme;etat;fps;image_pression;image_visible;image_voix;offre_encore_affichee;verdict_correct
+1;uber;froid;240;100;520;560;oui;oui
+2;uber;chaud;240;100;310;350;oui;oui
+3;bolt;chaud;240;100;;;oui;non

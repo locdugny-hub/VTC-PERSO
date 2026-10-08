@@ -1,0 +1,1285 @@
+{
+ "note": "Offres FICTIVES, formats hypothétiques, OCR Tesseract (substitut). Ne mesure pas la précision réelle sur Uber/Bolt.",
+ "cases": [
+  {
+   "id": "synth-000",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 59.12,
+    "approachKm": 5.8,
+    "approachMin": 10,
+    "tripKm": 31.6,
+    "tripMin": 67
+   },
+   "ocrText": "Bolt\n\n59,12 €\nPrise en charge\n5,8 km ¢ 10 min\nTrajet\n\n31,6 km ¢ 67 min\nAccepter\n"
+  },
+  {
+   "id": "synth-001",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 18.13,
+    "approachKm": 1.9,
+    "approachMin": 4,
+    "tripKm": 8.9,
+    "tripMin": 17
+   },
+   "ocrText": "Uber Green\n€18.13\n\n4.93 *\n\n4 mins (1.9 km) away\n12 rue Fictive\n\n17 mins (8.9 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-002",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 49.14,
+    "approachKm": 0.7,
+    "approachMin": 1,
+    "tripKm": 14.2,
+    "tripMin": 27
+   },
+   "ocrText": "Bolt\n\n49,14€\n\nPrise en charge - 1 min - 0,7 km\n12 rue Fictive\n\nDestination - 27 min - 14,2 km\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-003",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 12.46,
+    "approachKm": 4.9,
+    "approachMin": 8,
+    "tripKm": 11.2,
+    "tripMin": 23
+   },
+   "ocrText": "Bolt\n\n12,46 €\n\nPrise en charge - 8 min: 4,9 km\n12 rue Fictive\n\nDestination - 23 min - 11,2 km\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-004",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": false,
+   "big": true,
+   "masked": true,
+   "truth": {
+    "price": 34.57,
+    "approachKm": 4.8,
+    "approachMin": 7,
+    "tripKm": 34.3,
+    "tripMin": 72
+   },
+   "ocrText": "Bolt\n\n34,57 €\n\nPrise en charge\n\n4,8 km e* 7 min\n\nTrajet\n\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-005",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 43.57,
+    "approachKm": 2.8,
+    "approachMin": 7,
+    "tripKm": 13.0,
+    "tripMin": 30
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n43,57 €\n\n4,93 *\n\nAT min (2,8 km)\n\n12 rue Fictive, Paris\n\nTrajet de 30 min (13,0 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-006",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 16.22,
+    "approachKm": 2.0,
+    "approachMin": 5,
+    "tripKm": 37.3,
+    "tripMin": 45
+   },
+   "ocrText": "Bolt\n\n16,22 €\n\nPrise en charge «5 min: 2,0 km\n12 rue Fictive\n\nDestination - 45 min - 37,3 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-007",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 38.51,
+    "approachKm": 2.2,
+    "approachMin": 3,
+    "tripKm": 12.6,
+    "tripMin": 24
+   },
+   "ocrText": "Bolt\n\n38,51 €\nPrise en charge\n2,2 km ¢ 3 min\nTrajet\n\n12,6 km ¢ 24 min\nAccepter\n"
+  },
+  {
+   "id": "synth-008",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": true,
+   "masked": true,
+   "truth": {
+    "price": 30.04,
+    "approachKm": 2.7,
+    "approachMin": 4,
+    "tripKm": 15.7,
+    "tripMin": 21
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n30,04 €\n\n4,93 *\n\nA 4 min (2,7 km)\n\n12 rue Fictive, Paris\n\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-009",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 28.17,
+    "approachKm": 5.8,
+    "approachMin": 11,
+    "tripKm": 30.0,
+    "tripMin": 64
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n28,17 €\n\n4,93 *\n\nA11 min (5,8 km)\n\n12 rue Fictive, Paris\n\nTrajet de 64 min (30,0 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-010",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 30.77,
+    "approachKm": 1.7,
+    "approachMin": 4,
+    "tripKm": 6.5,
+    "tripMin": 15
+   },
+   "ocrText": "Uber Green\n\n€30.77\n\n4.93 *\n\n4 mins (1.7 km) away\n\n12 rue Fictive\n\n15 mins (6.5 km) trip.\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-011",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 58.69,
+    "approachKm": 5.6,
+    "approachMin": 10,
+    "tripKm": 31.7,
+    "tripMin": 68
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n58,69 €\n\n4,93 *\n\nA 10 min (5,6 km)\n\n12 rue Fictive, Paris\n\nTrajet de 68 min (31,7 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-012",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 19.13,
+    "approachKm": 3.8,
+    "approachMin": 9,
+    "tripKm": 16.4,
+    "tripMin": 25
+   },
+   "ocrText": "Bolt\n\n19,13 €\n\nPrise en charge - 9 min - 3,8\nkm\n\n12 rue Fictive\n\nDestination - 25 min: 16,4 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-013",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 28.63,
+    "approachKm": 4.5,
+    "approachMin": 11,
+    "tripKm": 29.6,
+    "tripMin": 53
+   },
+   "ocrText": "Bolt\n\n28,63 €\n\nPrise en charge - 11 min: 4,5 km\n12 rue Fictive\n\nDestination - 53 min - 29,6 km\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-014",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 19.74,
+    "approachKm": 4.4,
+    "approachMin": 7,
+    "tripKm": 24.7,
+    "tripMin": 56
+   },
+   "ocrText": "Bolt\n\n19,74 €\n\nPrise en charge - 7 min - 4,4 km\n12 rue Fictive\n\nDestination - 56 min - 24,7 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-015",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 10.54,
+    "approachKm": 1.9,
+    "approachMin": 5,
+    "tripKm": 32.4,
+    "tripMin": 50
+   },
+   "ocrText": "Bolt\n\n10,54 €\n\nPrise en charge - 5 min: 1,9 km\n12 rue Fictive\n\nDestination - 50 min - 32,4 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-016",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 17.6,
+    "approachKm": 1.3,
+    "approachMin": 3,
+    "tripKm": 1.9,
+    "tripMin": 3
+   },
+   "ocrText": "Uber Green\n€17.60\n\n4.93 *\n\n3 mins (1.3 km) away\n12 rue Fictive\n\n3 mins (1.9 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-017",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 52.01,
+    "approachKm": 2.3,
+    "approachMin": 6,
+    "tripKm": 12.9,
+    "tripMin": 28
+   },
+   "ocrText": "Bolt\n\n52,01 €\nPrise en charge\n2,3 km * 6 min\nTrajet\n\n12,9 km * 28 min\nAccepter\n"
+  },
+  {
+   "id": "synth-018",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 23.73,
+    "approachKm": 3.1,
+    "approachMin": 7,
+    "tripKm": 23.4,
+    "tripMin": 54
+   },
+   "ocrText": "Bolt\n\n23,73 €\n\nPrise en charge - 7 min - 3,1 km\n12 rue Fictive\n\nDestination - 54 min - 23,4 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-019",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 35.54,
+    "approachKm": 0.6,
+    "approachMin": 1,
+    "tripKm": 14.9,
+    "tripMin": 23
+   },
+   "ocrText": "Bolt\n\n35,54€\n\nPrise en charge - 1 min - 0,6 km\n12 rue Fictive\n\nDestination - 23 min - 14,9 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-020",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 7.01,
+    "approachKm": 5.4,
+    "approachMin": 9,
+    "tripKm": 5.9,
+    "tripMin": 11
+   },
+   "ocrText": "Uber Green\n€7.01\n\n4.93 *\n\n9 mins (5.4 km) away\n12 rue Fictive\n\n11 mins (5.9 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-021",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 28.36,
+    "approachKm": 0.4,
+    "approachMin": 1,
+    "tripKm": 8.3,
+    "tripMin": 18
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n28,36 €\n\n4,93 *\n\nA 1 min (0,4 km)\n\n12 rue Fictive, Paris\nTrajet de 18 min (8,3 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-022",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 14.32,
+    "approachKm": 4.4,
+    "approachMin": 9,
+    "tripKm": 18.4,
+    "tripMin": 28
+   },
+   "ocrText": "Bolt\n\n14,32 €\nPrise en charge\n4,4km +9 min\nTrajet\n\n18,4 km * 28 min\nAccepter\n"
+  },
+  {
+   "id": "synth-023",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 16.57,
+    "approachKm": 3.2,
+    "approachMin": 6,
+    "tripKm": 32.0,
+    "tripMin": 64
+   },
+   "ocrText": "Uber Green\n\n€16.57\n\n4.93 *\n\n6 mins (3.2 km) away\n\n12 rue Fictive\n\n64 mins (32.0 km) trip\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-024",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 41.0,
+    "approachKm": 0.9,
+    "approachMin": 2,
+    "tripKm": 4.9,
+    "tripMin": 10
+   },
+   "ocrText": "Uber Green\n€41.00\n\n4.93 *\n\n2 mins (0.9 km) away\n12 rue Fictive\n\n10 mins (4.9 km) trip.\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-025",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": true,
+   "masked": true,
+   "truth": {
+    "price": 49.78,
+    "approachKm": 5.8,
+    "approachMin": 10,
+    "tripKm": 14.3,
+    "tripMin": 30
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n49,78 €\n\n4,93 *\n\nA 10 min (5,8 km)\n\n12 rue Fictive, Paris\n\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-026",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 51.82,
+    "approachKm": 3.4,
+    "approachMin": 7,
+    "tripKm": 30.8,
+    "tripMin": 76
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n51,82 €\n\n4,93 *\n\nA7 min (3,4 km)\n\n12 rue Fictive, Paris\n\nTrajet de 76 min (30,8 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-027",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 14.44,
+    "approachKm": 2.4,
+    "approachMin": 4,
+    "tripKm": 13.3,
+    "tripMin": 26
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n14,44 €\n\n4,93 *\n\nA4 min (2,4 km)\n\n12 rue Fictive, Paris\n\nTrajet de 26 min (13,3 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-028",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 12.8,
+    "approachKm": 1.4,
+    "approachMin": 3,
+    "tripKm": 2.8,
+    "tripMin": 3
+   },
+   "ocrText": "Bolt\n\n12,80 €\nPrise en charge\n1,4 km * 3 min\nTrajet\n\n2,8 km * 3 min\nAccepter\n"
+  },
+  {
+   "id": "synth-029",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 54.79,
+    "approachKm": 3.5,
+    "approachMin": 5,
+    "tripKm": 10.5,
+    "tripMin": 24
+   },
+   "ocrText": "Bolt\n\n54,79 €\n\nPrise en charge «5 min: 3,5 km\n12 rue Fictive\n\nDestination - 24 min - 10,5 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-030",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 14.39,
+    "approachKm": 3.9,
+    "approachMin": 11,
+    "tripKm": 25.6,
+    "tripMin": 48
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n14,39 €\n\n4,93 *\n\nA 11 min (3,9 km)\n\n12 rue Fictive, Paris\n\nTrajet de 48 min (25,6 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-031",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 31.05,
+    "approachKm": 4.9,
+    "approachMin": 11,
+    "tripKm": 4.9,
+    "tripMin": 8
+   },
+   "ocrText": "Uber Green\n€31.05\n\n4.93 &\n\n11 mins (4.9 km) away\n12 rue Fictive\n\n8 mins (4.9 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-032",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 44.28,
+    "approachKm": 0.4,
+    "approachMin": 1,
+    "tripKm": 14.0,
+    "tripMin": 25
+   },
+   "ocrText": "Uber Green\n\n€44.28\n\n4.93 *\n\n1 mins (0.4 km) away\n\n12 rue Fictive\n\n25 mins (14.0 km) trip\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-033",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": true,
+   "masked": true,
+   "truth": {
+    "price": 58.01,
+    "approachKm": 1.5,
+    "approachMin": 2,
+    "tripKm": 32.2,
+    "tripMin": 44
+   },
+   "ocrText": "Bolt\n\n58,01 €\n\nPrise en charge : 2 min: 1,5\nkm\n\n12 rue Fictive\n\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-034",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 55.02,
+    "approachKm": 4.7,
+    "approachMin": 13,
+    "tripKm": 22.6,
+    "tripMin": 51
+   },
+   "ocrText": "Bolt\n\n55,02 €\n\nPrise en charge: 13 min: 4,7\nkm\n\n12 rue Fictive\n\nDestination - 51 min: 22,6 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-035",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 18.91,
+    "approachKm": 2.9,
+    "approachMin": 6,
+    "tripKm": 7.3,
+    "tripMin": 12
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n18,91 €\n\n4,93 *\n\nA6 min (2,9 km)\n\n12 rue Fictive, Paris\nTrajet de 12 min (7,3 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-036",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 28.97,
+    "approachKm": 5.9,
+    "approachMin": 16,
+    "tripKm": 16.5,
+    "tripMin": 21
+   },
+   "ocrText": "Bolt\n\n28,97 €\n\nPrise en charge - 16 min: 5,9 km\n12 rue Fictive\n\nDestination - 21 min - 16,5 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-037",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 12.81,
+    "approachKm": 5.4,
+    "approachMin": 14,
+    "tripKm": 28.7,
+    "tripMin": 42
+   },
+   "ocrText": "Bolt\n\n12,81 €\nPrise en charge\n5,4km * 14 min\nTrajet\n\n28,7 km * 42 min\nAccepter\n"
+  },
+  {
+   "id": "synth-038",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 59.37,
+    "approachKm": 2.2,
+    "approachMin": 3,
+    "tripKm": 7.2,
+    "tripMin": 14
+   },
+   "ocrText": "Uber Green\n€59.37\n\n4.93 *\n\n3 mins (2.2 km) away\n12 rue Fictive\n\n14 mins (7.2 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-039",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 57.08,
+    "approachKm": 2.2,
+    "approachMin": 3,
+    "tripKm": 26.5,
+    "tripMin": 39
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n57,08 €\n\n4,93 *\n\nA 3 min (2,2 km)\n\n12 rue Fictive, Paris\n\nTrajet de 39 min (26,5 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-040",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 57.78,
+    "approachKm": 5.9,
+    "approachMin": 13,
+    "tripKm": 2.4,
+    "tripMin": 4
+   },
+   "ocrText": "Uber Green\n\n€57.78\n\n4.93 &\n\n13 mins (5.9 km) away\n\n12 rue Fictive\n\n4 mins (2.4 km) trip\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-041",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 34.53,
+    "approachKm": 0.7,
+    "approachMin": 1,
+    "tripKm": 21.4,
+    "tripMin": 36
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n34,53 €\n\n4,93 *\n\nA 1 min (0,7 km)\n\n12 rue Fictive, Paris\n\nTrajet de 36 min (21,4 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-042",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 12.87,
+    "approachKm": 3.8,
+    "approachMin": 6,
+    "tripKm": 26.5,
+    "tripMin": 43
+   },
+   "ocrText": "Uber Green\n€12.87\n\n4.93 *\n\n6 mins (3.8 km) away\n12 rue Fictive\n\n43 mins (26.5 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-043",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 54.15,
+    "approachKm": 3.6,
+    "approachMin": 8,
+    "tripKm": 12.9,
+    "tripMin": 19
+   },
+   "ocrText": "Uberx\nExclusif\n54,15 €\n4,93 *\nA8 min (3,6 km)\n12 rue Fictive, Paris\naict de 19 min (12.9 km\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-044",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 58.38,
+    "approachKm": 5.2,
+    "approachMin": 11,
+    "tripKm": 13.3,
+    "tripMin": 30
+   },
+   "ocrText": "Uber Green\n€58.38\n\n4.93 *\n\n11 mins (5.2 km) away\n12 rue Fictive\n\n30 mins (13.3 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-045",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 22.66,
+    "approachKm": 5.8,
+    "approachMin": 9,
+    "tripKm": 4.1,
+    "tripMin": 7
+   },
+   "ocrText": "Uber Green\n€22.66\n\n4.93 *\n\n9 mins (5.8 km) away\n12 rue Fictive\n\n7 mins (4.1 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-046",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 44.3,
+    "approachKm": 2.4,
+    "approachMin": 4,
+    "tripKm": 31.4,
+    "tripMin": 39
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n44,30 €\n\n4,93 *\n\nA4 min (2,4 km)\n\n12 rue Fictive, Paris\n\nTrajet de 39 min (31,4 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-047",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 10.33,
+    "approachKm": 1.8,
+    "approachMin": 4,
+    "tripKm": 22.5,
+    "tripMin": 30
+   },
+   "ocrText": "Bolt\n\n10,33 €\n\nPrise en charge - 4 min: 1,8 km\n12 rue Fictive\n\nDestination - 30 min - 22,5 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-048",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 29.52,
+    "approachKm": 4.4,
+    "approachMin": 6,
+    "tripKm": 36.6,
+    "tripMin": 54
+   },
+   "ocrText": "Bolt\n\n29,52 €\n\nPrise en charge - 6 min: 4,4 km\n12 rue Fictive\n\nDestination - 54 min - 36,6 km\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-049",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 12.85,
+    "approachKm": 5.9,
+    "approachMin": 16,
+    "tripKm": 25.3,
+    "tripMin": 59
+   },
+   "ocrText": "Bolt\n\n12,85 €\n\nPrise en charge - 16 min - 5,9 km\n12 rue Fictive\n\nDestination - 59 min - 25,3 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-050",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 23.87,
+    "approachKm": 1.5,
+    "approachMin": 2,
+    "tripKm": 14.7,
+    "tripMin": 30
+   },
+   "ocrText": "Bolt\n\n23,87 €\n\nPrise en charge - 2 min: 1,5 km\n12 rue Fictive\n\nDestination - 30 min - 14,7 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-051",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 8.31,
+    "approachKm": 5.0,
+    "approachMin": 9,
+    "tripKm": 22.5,
+    "tripMin": 33
+   },
+   "ocrText": "Bolt\n\n8,31 €\n\nPrise en charge - 9 min: 5,0 km\n12 rue Fictive\n\nDestination - 33 min - 22,5 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-052",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 25.83,
+    "approachKm": 5.0,
+    "approachMin": 12,
+    "tripKm": 3.0,
+    "tripMin": 4
+   },
+   "ocrText": "Bolt\n\n25,83 €\n\nPrise en charge : 12 min: 5,0 km\n12 rue Fictive\n\nDestination - 4 min - 3,0 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-053",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 8.27,
+    "approachKm": 5.3,
+    "approachMin": 14,
+    "tripKm": 8.9,
+    "tripMin": 19
+   },
+   "ocrText": "Bolt\n\n8,27 €\nPrise en charge\n5,3 km ¢ 14 min\nTrajet\n\n8,9 km ¢ 19 min\nAccepter\n"
+  },
+  {
+   "id": "synth-054",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 41.32,
+    "approachKm": 1.3,
+    "approachMin": 3,
+    "tripKm": 18.1,
+    "tripMin": 33
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n41,32 €\n\n4,93 *\n\nA 3 min (1,3 km)\n\n12 rue Fictive, Paris\n\nTrajet de 33 min (18,1 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-055",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 29.92,
+    "approachKm": 5.8,
+    "approachMin": 12,
+    "tripKm": 12.0,
+    "tripMin": 26
+   },
+   "ocrText": "Uber Green\n€29.92\n\n4.93 &\n\n12 mins (5.8 km) away\n12 rue Fictive\n\n26 mins (12.0 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-056",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 7.26,
+    "approachKm": 2.4,
+    "approachMin": 5,
+    "tripKm": 37.3,
+    "tripMin": 49
+   },
+   "ocrText": "Bolt\n\n7,26 €\n\nPrise en charge «5 min: 2,4 km\n12 rue Fictive\n\nDestination - 49 min - 37,3 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-057",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 40.48,
+    "approachKm": 3.7,
+    "approachMin": 10,
+    "tripKm": 30.3,
+    "tripMin": 42
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n40,48 €\n\n4,93 *\n\nA 10 min (3,7 km)\n\n12 rue Fictive, Paris\n\nTraiet de 42 min (30.3 km)\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-058",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 34.22,
+    "approachKm": 4.4,
+    "approachMin": 9,
+    "tripKm": 22.1,
+    "tripMin": 42
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n34,22 €\n\n4,93 *\n\nA9 min (4,4 km)\n\n12 rue Fictive, Paris\n\nTrajet de 42 min (22,1 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-059",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 15.07,
+    "approachKm": 1.3,
+    "approachMin": 3,
+    "tripKm": 5.6,
+    "tripMin": 11
+   },
+   "ocrText": "Bolt\n\n15,07 €\nPrise en charge\n1,3 km ¢ 3 min\nTrajet\n\n5,6 km ¢ 11 min\nAccepter\n"
+  },
+  {
+   "id": "synth-060",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 30.41,
+    "approachKm": 2.5,
+    "approachMin": 5,
+    "tripKm": 18.9,
+    "tripMin": 34
+   },
+   "ocrText": "Uber Green\n€30.41\n\n4.93 *\n\n5 mins (2.5 km) away\n12 rue Fictive\n\n34 mins (18.9 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-061",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": true,
+   "masked": true,
+   "truth": {
+    "price": 56.93,
+    "approachKm": 3.4,
+    "approachMin": 9,
+    "tripKm": 17.5,
+    "tripMin": 29
+   },
+   "ocrText": "Bolt\n\n56,93 €\n\nPrise en charge\n\n3,4 km ¢ 9 min\n\nTrajet\n\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-062",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 36.59,
+    "approachKm": 1.5,
+    "approachMin": 3,
+    "tripKm": 38.6,
+    "tripMin": 76
+   },
+   "ocrText": "Uber Green\n€36.59\n\n4.93 *\n\n3 mins (1.5 km) away\n12 rue Fictive\n\n76 mins (38.6 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-063",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 46.22,
+    "approachKm": 2.6,
+    "approachMin": 4,
+    "tripKm": 10.2,
+    "tripMin": 18
+   },
+   "ocrText": "Bolt\n\n46,22 €\nPrise en charge\n2,6 km * 4 min\nTrajet\n\n10,2 km * 18 min\nAccepter\n"
+  },
+  {
+   "id": "synth-064",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 55.03,
+    "approachKm": 0.6,
+    "approachMin": 1,
+    "tripKm": 18.3,
+    "tripMin": 31
+   },
+   "ocrText": "Bolt\n\n55,03 €\nPrise en charge\n0,6 km ¢ 1 min\nTrajet\n\n18,3 km ¢ 31 min\nAccepter\n"
+  },
+  {
+   "id": "synth-065",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 7.13,
+    "approachKm": 4.4,
+    "approachMin": 7,
+    "tripKm": 17.2,
+    "tripMin": 32
+   },
+   "ocrText": "Bolt\n\n7,13 €\n\nPrise en charge: 7 min: 4,4\nkm\n\n12 rue Fictive\n\nDestination - 32 min: 17,2 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-066",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 51.77,
+    "approachKm": 5.1,
+    "approachMin": 10,
+    "tripKm": 7.5,
+    "tripMin": 13
+   },
+   "ocrText": "Bolt\n\n51,77 €\nPrise en charge\n5,1 km * 10 min\nTrajet\n\n7,5 km * 13 min\nAccepter\n"
+  },
+  {
+   "id": "synth-067",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": true,
+   "truth": {
+    "price": 20.75,
+    "approachKm": 2.7,
+    "approachMin": 6,
+    "tripKm": 30.4,
+    "tripMin": 65
+   },
+   "ocrText": "Uber Green\n\n€20.75\n\n4.93 *\n\n6 mins (2.7 km) away\n\n12 rue Fictive\n\n65 mins (30.4 km) trip\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-068",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 27.74,
+    "approachKm": 4.6,
+    "approachMin": 7,
+    "tripKm": 33.5,
+    "tripMin": 81
+   },
+   "ocrText": "Bolt\n\n27,74€\n\nPrise en charge : 7 min: 4,6 km\n12 rue Fictive\n\nDestination - 81 min - 33,5 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-069",
+   "platform": "bolt",
+   "layout": "kmfirst",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 48.47,
+    "approachKm": 1.8,
+    "approachMin": 3,
+    "tripKm": 14.0,
+    "tripMin": 28
+   },
+   "ocrText": "Bolt\n\n48,47 €\nPrise en charge\n1,8 km * 3 min\nTrajet\n\n14,0 km * 28 min\nAccepter\n"
+  },
+  {
+   "id": "synth-070",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": true,
+   "masked": false,
+   "truth": {
+    "price": 47.38,
+    "approachKm": 5.8,
+    "approachMin": 12,
+    "tripKm": 29.5,
+    "tripMin": 57
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n47,38 €\n\n4,93 *\n\nA 12 min (5,8 km)\n\n12 rue Fictive, Paris\n\nTrajet de 57 min (29,5 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  },
+  {
+   "id": "synth-071",
+   "platform": "uber",
+   "layout": "en",
+   "dark": false,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 23.55,
+    "approachKm": 1.4,
+    "approachMin": 2,
+    "tripKm": 12.5,
+    "tripMin": 30
+   },
+   "ocrText": "Uber Green\n€23.55\n\n4.93 *\n\n2 mins (1.4 km) away\n12 rue Fictive\n\n30 mins (12.5 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-072",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 50.25,
+    "approachKm": 1.5,
+    "approachMin": 2,
+    "tripKm": 20.2,
+    "tripMin": 25
+   },
+   "ocrText": "Uber Green\n€50.25\n\n4.93 *\n\n2 mins (1.5 km) away\n12 rue Fictive\n\n25 mins (20.2 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-073",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 7.12,
+    "approachKm": 4.2,
+    "approachMin": 9,
+    "tripKm": 9.0,
+    "tripMin": 17
+   },
+   "ocrText": "Bolt\n\n7,12 €\n\nPrise en charge - 9 min: 4,2 km\n12 rue Fictive\n\nDestination - 17 min - 9,0 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-074",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 9.81,
+    "approachKm": 2.8,
+    "approachMin": 6,
+    "tripKm": 14.3,
+    "tripMin": 25
+   },
+   "ocrText": "Uber Green\n\n€9.81\n\n4.93 *\n\n6 mins (2.8 km) away\n12 rue Fictive\n\n25 mins (14.3 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-075",
+   "platform": "bolt",
+   "layout": "dot",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 41.13,
+    "approachKm": 4.0,
+    "approachMin": 10,
+    "tripKm": 11.8,
+    "tripMin": 19
+   },
+   "ocrText": "Bolt\n\n41,13 €\n\nPrise en charge - 10 min - 4,0 km\n12 rue Fictive\n\nDestination - 19 min - 11,8 km\nAvenue Imaginaire\n\nAccepter\n"
+  },
+  {
+   "id": "synth-076",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 50.35,
+    "approachKm": 5.1,
+    "approachMin": 13,
+    "tripKm": 30.8,
+    "tripMin": 45
+   },
+   "ocrText": "Uber Green\n€50.35\n\n4.93 &\n\n13 mins (5.1 km) away\n12 rue Fictive\n\n45 mins (30.8 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-077",
+   "platform": "uber",
+   "layout": "en",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 15.3,
+    "approachKm": 0.5,
+    "approachMin": 1,
+    "tripKm": 16.3,
+    "tripMin": 29
+   },
+   "ocrText": "Uber Green\n€15.30\n\n4.93 *\n\n1 mins (0.5 km) away\n12 rue Fictive\n\n29 mins (16.3 km) trip\nAvenue Imaginaire\nAccept\n"
+  },
+  {
+   "id": "synth-078",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": true,
+   "masked": true,
+   "truth": {
+    "price": 33.09,
+    "approachKm": 0.4,
+    "approachMin": 1,
+    "tripKm": 34.4,
+    "tripMin": 63
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n33,09 €\n\n4,93 *\n\nA 1 min (0,4 km)\n\n12 rue Fictive, Paris\n\nMessages : Nouveau message\n"
+  },
+  {
+   "id": "synth-079",
+   "platform": "uber",
+   "layout": "fr",
+   "dark": true,
+   "big": false,
+   "masked": false,
+   "truth": {
+    "price": 16.26,
+    "approachKm": 4.4,
+    "approachMin": 11,
+    "tripKm": 2.4,
+    "tripMin": 4
+   },
+   "ocrText": "Uberx\n\nExclusif\n\n16,26 €\n\n4,93 *\n\nA11 min (4,4 km)\n\n12 rue Fictive, Paris\nTrajet de 4 min (2,4 km)\nAvenue Imaginaire, Paris\nAccepter\n"
+  }
+ ]
+}

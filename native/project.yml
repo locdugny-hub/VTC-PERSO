@@ -1,0 +1,30 @@
+# Projet XcodeGen (https://github.com/yonaskolb/XcodeGen) — génère VTCPerso.xcodeproj sur macOS.
+# Composant natif EXPÉRIMENTAL "zéro action par offre" : ScreenCaptureKit (iOS 27+).
+# NON COMPILÉ dans l'environnement de développement de ce livrable (pas de macOS / Xcode).
+name: VTCPerso
+options:
+  bundleIdPrefix: fr.vtcperso.perso
+  deploymentTarget:
+    iOS: "27.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: ""   # renseigné par Xcode (Personal Team) ou laissé vide pour un build non signé
+    CODE_SIGN_STYLE: Automatic
+targets:
+  VTCPerso:
+    type: application
+    platform: iOS
+    sources:
+      - path: VTCPerso
+    resources:
+      - path: VTCPerso/Resources/vtc-core.js
+      - path: VTCPerso/Resources/bridge.js
+    info:
+      path: VTCPerso/Info.plist
+      properties:
+        CFBundleDisplayName: VTC Perso Auto
+        UILaunchScreen: {}
+        UIBackgroundModes: [screen-capture, audio]
+        NSScreenCaptureUsageDescription: "VTC Perso lit l'offre affichée par l'application chauffeur pour calculer sa rentabilité. Rien n'est enregistré ni envoyé."
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]

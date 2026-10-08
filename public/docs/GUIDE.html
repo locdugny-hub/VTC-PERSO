@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>VTC Perso : GUIDE</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>body{font:16px/1.5 -apple-system,system-ui,sans-serif;max-width:760px;margin:0 auto;padding:16px;color:#0f1b2d}table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}td,th{border:1px solid #d9dee7;padding:6px;vertical-align:top}code{background:#eef1f6;padding:1px 4px;border-radius:4px;word-break:break-all}@media(prefers-color-scheme:dark){body{background:#0b1120;color:#e8edf6}code{background:#1e2638}td,th{border-color:#273248}a{color:#8fb3ff}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">VTC Perso : GUIDE</h1>
+</header>
+<h1 id="vtc-perso--guide-court">VTC Perso : guide court</h1>
+<h2 id="installer-une-fois-à-larrêt">Installer (une fois, à
+l'arrêt)</h2>
+<ol type="1">
+<li>Ouvrez l'adresse de votre PWA dans <strong>Safari</strong>.</li>
+<li>Touchez <strong>Partager</strong>, puis <strong>Sur l'écran
+d'accueil</strong>, puis <strong>Ajouter</strong>. Sous iOS 26 et 27, si
+l'option n'apparaît pas tout de suite, faites défiler la feuille de
+partage ou touchez « Plus ».</li>
+<li>Ouvrez VTC Perso depuis l'écran d'accueil, puis renseignez dans
+<strong>Réglages</strong> :
+<ul>
+<li><strong>Véhicule et coûts</strong> : un champ vide signifie « non
+renseigné », ce qui est différent de 0 ;</li>
+<li><strong>Seuils</strong> ;</li>
+<li><strong>Base des prix Uber / Bolt</strong> : à vérifier sur vos
+relevés.</li>
+</ul></li>
+<li>Installez le <strong>raccourci</strong> en suivant Réglages &gt;
+Raccourci iPhone : Scriptable, script, configuration, raccourci, puis
+AssistiveTouch.</li>
+<li>Faites le <strong>test guidé</strong> (onglet Session) : une offre
+fictive s'affiche, appuyez sur AssistiveTouch et comparez la
+notification au résultat attendu.</li>
+</ol>
+<h2 id="pendant-une-session">Pendant une session</h2>
+<ol type="1">
+<li>Dans l'onglet <strong>Session</strong>, touchez « Démarrer ». Vous
+pouvez saisir le compteur kilométrique.</li>
+<li>Ouvrez <strong>Uber</strong> ou <strong>Bolt</strong> et laissez
+l'app chauffeur affichée.</li>
+<li>Quand une offre apparaît, faites <strong>une pression sur
+AssistiveTouch</strong>. Vous recevez :
+<ul>
+<li>une bannière : verdict, €/h, €/km, heure de capture ;</li>
+<li>une annonce vocale brève.</li>
+</ul></li>
+<li><strong>Verdicts possibles</strong> :
+<ul>
+<li><strong>Favorable</strong> : les deux seuils sont atteints.</li>
+<li><strong>Limite</strong> : chaque ratio atteint au moins 80 % de son
+seuil.</li>
+<li><strong>Faible</strong> : sinon.</li>
+<li><strong>Partiel</strong> : une donnée manque ou n'est pas
+confirmée.</li>
+<li><strong>Analyse indisponible</strong> : l'offre n'a pas pu être
+lue.</li>
+</ul></li>
+<li><strong>Vous décidez seul</strong> d'accepter ou de refuser :
+l'outil ne touche jamais à l'offre.</li>
+<li>Le résultat est valable environ 10 secondes. Au-delà, il n'est plus
+affiché.</li>
+<li>En fin de journée, touchez « Terminer ». La durée inclut l'attente
+et exclut les pauses.</li>
+</ol>
+<h2 id="après-la-session">Après la session</h2>
+<ol type="1">
+<li>Dans Scriptable, ouvrez <strong>VTC Perso</strong>, puis
+<strong>Copier le journal</strong>. Dans la PWA, ouvrez Réglages &gt;
+Données &gt; <strong>Importer le journal</strong>. Avec un compte,
+utilisez plutôt « Synchroniser maintenant ».</li>
+<li>Dans l'<strong>Historique</strong>, pour chaque offre :
+<ul>
+<li>marquez-la Acceptée, Refusée, Annulée, Réalisée (avec le
+<strong>montant réellement perçu</strong>) ou Encaissée ;</li>
+<li>corrigez si besoin une lecture erronée.</li>
+</ul></li>
+<li>Dans le <strong>Bilan</strong>, ajoutez vos dépenses réelles
+(carburant, péages…). Les ratios utilisent le temps réel de
+session.</li>
+</ol>
+<h2 id="sauvegarder">Sauvegarder</h2>
+<ul>
+<li><strong>Réglages &gt; Données &gt; Exporter tout (JSON)</strong> : à
+faire régulièrement, même avec un compte. La sauvegarde vérifie les
+totaux et les relations à la restauration.</li>
+<li>L'export CSV (offres, courses, dépenses) s'ouvre dans Excel ou
+Numbers.</li>
+<li>Si vous modifiez un réglage, <strong>recopiez la
+configuration</strong> dans Scriptable avant de reprendre la route. La
+PWA l'indique dans l'onglet Session.</li>
+</ul>
+</body>
+</html>

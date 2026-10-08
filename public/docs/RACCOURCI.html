@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>VTC Perso : RACCOURCI</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>body{font:16px/1.5 -apple-system,system-ui,sans-serif;max-width:760px;margin:0 auto;padding:16px;color:#0f1b2d}table{border-collapse:collapse;width:100%;display:block;overflow-x:auto}td,th{border:1px solid #d9dee7;padding:6px;vertical-align:top}code{background:#eef1f6;padding:1px 4px;border-radius:4px;word-break:break-all}@media(prefers-color-scheme:dark){body{background:#0b1120;color:#e8edf6}code{background:#1e2638}td,th{border-color:#273248}a{color:#8fb3ff}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">VTC Perso : RACCOURCI</h1>
+</header>
+<h1
+id="raccourci--vtc-analyse---construction-exacte-iphone-12-pro-max-ios-26-ou-27">Raccourci
+« VTC Analyse » : construction exacte (iPhone 12 Pro Max, iOS 26 ou
+27)</h1>
+<p><strong>Statut : non validé sur iPhone.</strong> Ce parcours a été
+construit et testé avec un simulateur (voir
+<code>tests/scriptable.test.ts</code>). Il n'a pas été exécuté sur un
+téléphone. Le protocole de validation est dans
+<code>docs/VALIDATION_IPHONE.md</code>.</p>
+<p><strong>Pas de fichier <code>.shortcut</code> ni de lien iCloud
+fourni.</strong> Depuis iOS 15, un raccourci importé sous forme de
+fichier doit être signé, et cette signature exige la commande
+<code>shortcuts sign</code> d'un Mac. Un lien iCloud, lui, ne peut être
+créé que depuis un iPhone où le raccourci existe déjà. Une fois le
+raccourci construit, vous pourrez créer ce lien vous-même avec «
+Partager &gt; Copier le lien iCloud ».</p>
+<p><strong>Complexité : 16 actions, environ 20 à 30 minutes</strong>, à
+faire une seule fois, à l'arrêt.</p>
+<h2 id="0-prérequis-une-fois">0. Prérequis (une fois)</h2>
+<ol type="1">
+<li>Installer <strong>Scriptable</strong> depuis l'App Store. L'app est
+gratuite et sans abonnement ; seuls des pourboires facultatifs sont
+proposés. Dernière version : 1.7.19 du 30/09/2024. Elle n'a pas été mise
+à jour depuis, donc son fonctionnement sur votre version d'iOS fait
+partie des points à valider.</li>
+<li>Copier le script dans Scriptable, au choix :
+<ul>
+<li><strong>Par Fichiers</strong> : dans la PWA, ouvrez « Réglages &gt;
+Raccourci &gt; Télécharger VTCPerso.js » et enregistrez le fichier dans
+<strong>Fichiers &gt; iCloud Drive &gt; Scriptable</strong>. Si vous
+n'utilisez pas iCloud Drive, passez par l'autre méthode.</li>
+<li><strong>Par copier-coller</strong> : « Réglages &gt; Raccourci &gt;
+Copier le script », puis dans Scriptable touchez « + », collez, et
+nommez le script <strong>VTC Perso</strong>.</li>
+</ul></li>
+<li>Importer la configuration :
+<ul>
+<li>Dans la PWA, ouvrez « Réglages &gt; Raccourci &gt; Copier la
+configuration ».</li>
+<li>Dans Scriptable, touchez <strong>VTC Perso</strong>, puis « Importer
+la configuration (presse-papiers) ».</li>
+<li>Le message affiche la version de configuration
+(<code>cfg-xxxxxxxx</code>). Cette même version apparaît dans la
+PWA.</li>
+</ul></li>
+<li>Dans le même menu Scriptable, lancer « Tester une offre fictive ».
+Si iOS le demande, autorisez les notifications de Scriptable.</li>
+</ol>
+<h2 id="1-construire-le-raccourci-app-raccourcis-bouton-">1. Construire
+le raccourci (app Raccourcis, bouton +)</h2>
+<p>Nommez-le <strong>VTC Analyse</strong>. Les libellés ci-dessous sont
+ceux de l'interface française. Les noms anglais sont donnés entre
+parenthèses pour retrouver les actions par la recherche.</p>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Action</th>
+<th>Réglages exacts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Date actuelle</strong> (Current Date)</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Formater la date</strong> (Format Date)</td>
+<td>Date : <em>Date actuelle</em>. Format :
+<strong>Personnalisé</strong>, chaîne
+<code>yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ</code></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Prendre une capture d'écran</strong> (Take Screenshot)</td>
+<td>Écran principal</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>Extraire le texte de l'image</strong> (Extract Text from
+Image). Sous iOS 27, l'action peut s'appeler <strong>Extraire de
+l'image</strong> (Extract from Image)</td>
+<td>Entrée : <em>Capture d'écran</em>. Si l'action propose un type,
+choisissez <strong>Texte</strong></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>Dictionnaire</strong> (Dictionary)</td>
+<td>3 clés de type Texte : <code>mode</code> = <code>analyze</code> ;
+<code>text</code> = variable <em>Texte extrait</em> (résultat de
+l'action 4) ; <code>t0</code> = variable <em>Date formatée</em>
+(résultat de l'action 2)</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td><strong>Run Script</strong> (Scriptable)</td>
+<td>Script : <strong>VTC Perso</strong>. Parameter :
+<em>Dictionnaire</em>. <strong>Run In App : désactivé</strong>.
+<strong>Show When Run : désactivé</strong></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td><strong>Obtenir la valeur du dictionnaire</strong> (Get Dictionary
+Value)</td>
+<td>Clé <code>title</code> dans <em>Résultat du script</em> (Script
+Result). Renommez la variable <strong>Titre</strong></td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td><strong>Obtenir la valeur du dictionnaire</strong></td>
+<td>Clé <code>body</code> dans <em>Résultat du script</em>. Renommez la
+variable <strong>Corps</strong></td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td><strong>Obtenir la valeur du dictionnaire</strong></td>
+<td>Clé <code>speech</code> dans <em>Résultat du script</em>. Renommez
+la variable <strong>Voix</strong></td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td><strong>Si</strong> (If)</td>
+<td><em>Titre</em> <strong>a une valeur</strong> (has any value)</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td><strong>Afficher la notification</strong> (Show Notification)</td>
+<td>Titre : <em>Titre</em>. Corps : <em>Corps</em>. Jouer un son :
+désactivé</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td><strong>Si</strong> (imbriqué)</td>
+<td><em>Voix</em> <strong>a une valeur</strong></td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td><strong>Énoncer le texte</strong> (Speak Text)</td>
+<td>Texte : <em>Voix</em>. <strong>Attendre la fin : désactivé</strong>.
+Langue : Français (France). Débit : un peu plus rapide</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td><strong>Fin Si</strong> + <strong>Fin Si</strong></td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td><em>(mesure, recommandée pendant la validation)</em> <strong>Date
+actuelle</strong>, puis <strong>Formater la date</strong> avec le même
+format, puis <strong>Dictionnaire</strong> : <code>mode</code> =
+<code>post</code>, <code>id</code> = valeur <code>id</code> du
+<em>Résultat du script</em>, <code>tNotify</code> = <em>Date
+formatée</em></td>
+<td>Utilisez Obtenir la valeur du dictionnaire pour lire
+<code>id</code></td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td><em>(mesure)</em> <strong>Run Script</strong></td>
+<td>Script <strong>VTC Perso</strong>, Parameter = le dictionnaire de
+l'étape 15, Run In App désactivé</td>
+</tr>
+</tbody>
+</table>
+<p>Dans les réglages du raccourci (icône ⓘ) :</p>
+<ul>
+<li>désactiver « Afficher dans la feuille de partage » ;</li>
+<li>si l'option existe, désactiver « Demander avant d'exécuter ».</li>
+</ul>
+<p><strong>Pourquoi ces choix :</strong></p>
+<ul>
+<li><strong>Afficher la notification</strong> ne bloque pas le
+raccourci, contrairement à « Afficher l'alerte » qui attend une réponse.
+Source : Apple, <em>Use the Show Notification action</em>, guide
+Raccourcis iOS 27.</li>
+<li><strong>Rien n'est enregistré dans Photos</strong> : la capture
+reste en mémoire dans le raccourci.</li>
+<li><strong>Résultats périmés ou remplacés</strong> : le script renvoie
+un titre vide, donc rien n'est affiché.</li>
+</ul>
+<h2 id="2-premier-lancement-à-larrêt-autorisations">2. Premier lancement
+à l'arrêt (autorisations)</h2>
+<ol type="1">
+<li>Lancez <strong>VTC Analyse</strong> une fois depuis l'app
+Raccourcis.</li>
+<li>Pour chaque demande d'autorisation, par exemple pour exécuter
+Scriptable, choisissez <strong>Toujours autoriser</strong>. Apple
+documente ces choix : Allow Once, Always Allow, Don't Allow (<em>Adjust
+privacy settings</em>, iOS 27).</li>
+<li>Lancez-le une deuxième fois : <strong>aucune demande ne doit
+réapparaître</strong>. Si une demande revient à chaque fois, le critère
+« aucune confirmation répétée » échoue. Notez-le dans le protocole.</li>
+</ol>
+<h2 id="3-assistivetouch--une-seule-pression">3. AssistiveTouch : une
+seule pression</h2>
+<ol type="1">
+<li>Ouvrez Réglages &gt; Accessibilité &gt; Toucher &gt;
+<strong>AssistiveTouch</strong> et activez-le.</li>
+<li>Dans <strong>Actions personnalisées &gt; Toucher une fois</strong>,
+choisissez <strong>VTC Analyse</strong> dans la section Raccourcis.
+Apple documente les actions personnalisées d'AssistiveTouch, mais le
+choix d'un raccourci à cet endroit doit être constaté sur votre
+téléphone.</li>
+<li>Réglez <strong>Opacité au repos</strong> à environ 40 %.</li>
+<li><strong>Sécurité</strong> : placez le bouton <strong>loin du bouton
+« Accepter »</strong> d'Uber et de Bolt (par exemple en haut à gauche),
+pour qu'une pression ne puisse jamais toucher l'offre.</li>
+</ol>
+<p>Variante : Réglages &gt; Accessibilité &gt; Toucher &gt; Toucher le
+dos &gt; Toucher deux fois &gt; VTC Analyse. Elle fonctionne sur un
+iPhone 8 ou plus récent, mais elle est peu pratique avec un téléphone
+sur support.</p>
+<h2 id="4-rendre-le-résultat-visible-pendant-la-conduite">4. Rendre le
+résultat visible pendant la conduite</h2>
+<ul>
+<li>Ouvrez Réglages &gt; Notifications &gt; <strong>Raccourcis</strong>.
+Activez Autoriser, Bannières, et le style de bannière
+<strong>Temporaire</strong>. Le style Persistant masquerait
+l'offre.</li>
+<li><strong>Concentration « Conduite »</strong> : elle peut masquer ou
+limiter les notifications (Apple, support 108384). Dans Réglages &gt;
+Concentration &gt; Conduite &gt; Notifications autorisées &gt; Apps,
+ajoutez <strong>Raccourcis</strong>.</li>
+<li>La voix suit le volume média et le mode silencieux. Vérifiez-la
+pendant le guidage, avec le protocole.</li>
+<li>Une notification créée ne prouve pas qu'elle a été vue. Le protocole
+mesure l'affichage réel en vidéo.</li>
+</ul>
+<h2 id="5-variante-b-sans-scriptable--calcul-par-le-serveur">5. Variante
+B, sans Scriptable : calcul par le serveur</h2>
+<p>Remplacez l'action 6 par <strong>Obtenir le contenu de l'URL</strong>
+(Get Contents of URL) :</p>
+<table>
+<thead>
+<tr class="header">
+<th>Réglage</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>URL</td>
+<td><code>https://&lt;projet&gt;.supabase.co/functions/v1/device-api/analyze</code></td>
+</tr>
+<tr class="even">
+<td>Méthode</td>
+<td>POST</td>
+</tr>
+<tr class="odd">
+<td>En-têtes</td>
+<td><code>x-device-token</code> = votre jeton <code>vtcd_…</code>
+(Réglages &gt; Compte &gt; Jetons d'appareil)</td>
+</tr>
+<tr class="even">
+<td>Corps</td>
+<td>JSON : <code>text</code> = <em>Texte extrait</em>, <code>t0</code> =
+<em>Date formatée</em></td>
+</tr>
+</tbody>
+</table>
+<p>La réponse a la même forme que le résultat du script :
+<code>title</code>, <code>body</code>, <code>speech</code>,
+<code>id</code>.</p>
+<p>Limites de cette variante :</p>
+<ul>
+<li>elle dépend du réseau et de Supabase (projet gratuit mis en pause
+après 7 jours d'inactivité) ;</li>
+<li>la latence s'ajoute au délai de réponse ;</li>
+<li><strong>hors connexion, aucun verdict</strong>.</li>
+</ul>
+<p>Le jeton se trouve alors dans le raccourci. <strong>Ne partagez pas
+ce raccourci</strong>, et révoquez le jeton depuis la PWA si
+nécessaire.</p>
+<h2 id="6-après-la-session--transférer-lhistorique">6. Après la session
+: transférer l'historique</h2>
+<p>Trois possibilités :</p>
+<ul>
+<li><strong>Sans compte</strong> : dans Scriptable, « VTC Perso &gt;
+Copier le journal ». Puis dans la PWA, « Réglages &gt; Données &gt;
+Importer le journal du raccourci ». L'import est idempotent : un import
+répété ne crée pas de doublon.</li>
+<li><strong>Avec compte et jeton</strong> : dans Scriptable, «
+Synchroniser maintenant ». La PWA récupère ensuite les analyses lors de
+sa propre synchronisation.</li>
+<li><strong>Synchronisation après chaque offre</strong>
+(<code>syncMode: after_each</code>, activé dans la PWA) : une requête
+réseau part après l'affichage, ce qui n'est pas mesuré dans le délai du
+verdict. Elle prolonge l'exécution du raccourci d'environ une seconde.
+Ce mode est désactivé par défaut.</li>
+</ul>
+</body>
+</html>
