@@ -24,7 +24,7 @@ grant all on all tables in schema public to service_role;
 alter default privileges in schema public grant all on tables to service_role;
 alter default privileges in schema public grant usage, select on sequences to authenticated, service_role;
 SQL
-$PSQL -d postgres -f "$(dirname "$0")/../supabase/migrations/20261008000001_init.sql"
+$PSQL -d postgres -f "$(dirname "$0")/../supabase/migrations/20261008202418_vtc_perso_init.sql"
 $PSQL -d postgres -c "grant all on all tables in schema public to service_role; grant usage on all sequences in schema public to authenticated, service_role;"
 cp "$(dirname "$0")/../supabase/tests/rls_test.sql" "$DIR/t.sql"
 chmod 644 "$DIR/t.sql"

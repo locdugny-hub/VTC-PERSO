@@ -16,7 +16,7 @@ Mode local seul : ne définissez aucune variable. Le compte et l'IA restent alor
 
 ## 2. Supabase (facultatif : sauvegarde cloud, synchronisation, IA)
 1. Créez un projet gratuit (région **West EU (Paris)**).
-2. **Migration** : collez `supabase/migrations/20261008000001_init.sql` dans SQL Editor et exécutez-le. Avec la CLI, `supabase db push` fait la même chose.
+2. **Migration** : collez `supabase/migrations/20261008202418_vtc_perso_init.sql` dans SQL Editor et exécutez-le. Avec la CLI, `supabase db push` fait la même chose.
 3. **Authentification** : Authentication > Providers > Google.
    1. Créez un client OAuth de type « Application Web » dans Google Cloud (Google Auth Platform), sans facturation, avec les étendues openid, email et profile.
    2. Indiquez comme URI de redirection l'adresse de rappel affichée par Supabase.

@@ -1,45 +1,30 @@
 [build]
   command = "npm ci && npm run build"
   publish = "dist"
-
 [build.environment]
   NODE_VERSION = "22"
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1"
-  # Configuration publique du navigateur, protégée par RLS.
-  VITE_SUPABASE_URL = "https://vihzevndxgwetrwtaexp.supabase.co"
-  VITE_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Kp67u7LT7P9X_JWoQtSgMA_hR0eLC9s"
-
 [[headers]]
   for = "/sw.js"
   [headers.values]
     Cache-Control = "no-cache"
-
 [[headers]]
   for = "/manifest.webmanifest"
   [headers.values]
     Cache-Control = "no-cache"
     Content-Type = "application/manifest+json"
-
 [[headers]]
   for = "/index.html"
   [headers.values]
     Cache-Control = "no-cache"
-
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/VTCPerso.js"
-  [headers.values]
-    Cache-Control = "no-cache"
-    Content-Type = "text/javascript; charset=utf-8"
-
 [[headers]]
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
