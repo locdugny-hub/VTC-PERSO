@@ -134,7 +134,7 @@ function videoPair(raw) {
  const entries=[];
  for(let i=0;i<lines.length;i++){
   let a=lines[i].replace(/\s+/g,' ');
-  if(!/^\d{1,4}\s+(?:rue|av\.?|avenue|bd\.?|boulevard|place|allée|allee|route|quai|impasse|passage|cours)\b/i.test(a))continue;
+  if(!/^\d{1,4}\s+(?:rue|av\.?|avenue|bd\.?|boulevard|place|allée|allee|route|quai|impasse|passage|cours)(?:\s|$)/i.test(a))continue;
   for(let j=i+1;j<=Math.min(i+2,lines.length-1)&&!/\b\d{5}\b/.test(a);j++)a+=' '+lines[j];
   if(/\b\d{5}\b/.test(a))entries.push(a);
  }
