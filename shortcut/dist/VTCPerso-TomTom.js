@@ -101,6 +101,17 @@ function extractUberAddresses(text) {
     }
     return found.length>=2 && found[0]!==found[1] ? {pickup:found[0],destination:found[1]} : null;
 }
+function compactFallback(base) {
+    if (!base || !base.show) return base;
+    const v = String(base.verdict ?? '').toLowerCase();
+    const grade = v === 'favorable' ? 'BON' : v === 'faible' ? 'MAUVAIS' : 'MOYEN';
+    const icon = grade === 'BON' ? '🟢' : grade === 'MOYEN' ? '🟠' : '🔴';
+    const km = String(base.title ?? '').match(/\d+(?:[.,]\d+)?\s*€\s*\/\s*km/i)?.[0] ?? '';
+    const amount = String(base.body ?? '').match(/\b\d+(?:[.,]\d{1,2})?\s*€/i)?.[0] ?? '';
+    return { ...base, title: icon + ' ' + grade + ' · sans trafic',
+      body: [amount, km].filter(Boolean).join(' · ') || 'Analyse partielle',
+      speech: grade.toLowerCase(), speak: base.speak };
+}
 async function runAnalyzeTraffic(rt, input) {
     // Uber OCR: approach without a label directly after "Montant net de frais".
     const raw = typeof input.text === 'string' ? input.text : '';
@@ -111,16 +122,16 @@ async function runAnalyzeTraffic(rt, input) {
     input = { ...input, text: labeled };
     const base = runAnalyze(rt, input);
     if (!base.show || !rt.hasToken() || !/\buber\b|uberx/i.test(input.text ?? ''))
-        return base;
+        return compactFallback(base);
     const pair = extractUberAddresses(input.text ?? '');
     if (!pair)
-        return base;
+        return compactFallback(base);
     const cfg = rt.readJson('config.json');
     if (!cfg)
-        return base;
+        return compactFallback(base);
     const route = await rt.trafficRoute(pair.pickup, pair.destination);
     if (!route)
-        return base;
+        return compactFallback(base);
     const latest = rt.readJson('latest.json');
     if (!latest || latest.id !== base.id || Date.now() - Date.parse(latest.capturedAt) > 15000)
         return { ...base, show: false, title: '', speech: '' };
@@ -129,7 +140,7 @@ async function runAnalyzeTraffic(rt, input) {
     const price = amountLine ? Number(amountLine.replace(/[^0-9,.]/g, '').replace(',', '.')) : NaN;
     const approach = (input.text ?? '').match(/(\d{1,2})\s*min\s*\(\s*\d+(?:[.,]\d+)?\s*km\s*\)/i);
     if (!Number.isFinite(price) || price <= 0 || !approach || !/montant net de frais/i.test(input.text ?? ''))
-        return base;
+        return compactFallback(base);
     const minutes = Number(approach[1]) + route.trip_minutes;
     const hourly = 60 * price / minutes;
     const target = 25;
