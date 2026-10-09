@@ -110,7 +110,7 @@ function compactFallback(base) {
     const amount = String(base.body ?? '').match(/\b\d+(?:[.,]\d{1,2})?\s*€/i)?.[0] ?? '';
     return { ...base, title: icon + ' ' + grade + ' · sans trafic',
       body: [amount, km].filter(Boolean).join(' · ') || 'Analyse partielle',
-      speech: grade.toLowerCase(), speak: base.speak };
+      speech: grade.toLowerCase(), verdict: grade.toLowerCase(), speak: base.speak };
 }
 async function runAnalyzeTraffic(rt, input) {
     // Uber OCR: approach without a label directly after "Montant net de frais".
@@ -159,7 +159,7 @@ async function runAnalyzeTraffic(rt, input) {
     const title = `${symbol} ${grade} · ${fmt(hourly)} €/h`;
     const body = `${price.toFixed(2).replace('.', ',')} € · ${minutes} min · ${kmRate === null ? '€/km —' : kmRate.toFixed(2).replace('.', ',') + ' €/km'}`;
     // Keep complete analysis in the local journal, only shorten the real-time alert.
-    return { ...base, title, body, speech: grade.toLowerCase(), verdict: grade === 'BON' ? 'favorable' : grade === 'MOYEN' ? 'partiel' : 'faible', speak: !!cfg.voice };
+    return { ...base, title, body, speech: grade.toLowerCase(), verdict: grade.toLowerCase(), speak: !!cfg.voice };
 }
 /** Appelé après l'affichage : enregistre l'instant de restitution (mesure) ; synchronise si demandé. */
 async function runPost(rt, input) {
