@@ -139,12 +139,16 @@ async function runAnalyzeTraffic(rt, input) {
     const kmRate = localKmMatch ? Number(localKmMatch[1].replace(',', '.')) : null;
     const kmWeak = kmRate !== null && base.verdict === 'faible';
     const hourlyOk = hourly >= target;
-    const label = !hourlyOk ? '⚠️ Sous objectif horaire' : kmWeak
-      ? '⚠️ Horaire OK · kilomètres faibles' : '✅ Objectif horaire atteint';
-    const kmText = kmRate === null ? '€/km non vérifié' : `${kmRate.toFixed(2).replace('.', ',')} €/km`;
-    const body = `${price.toFixed(2).replace('.', ',')} € nets Uber · ~${minutes} min (${approach[1]} + ${route.trip_minutes} trafic) · ~${hourly.toFixed(1).replace('.', ',')} €/h · ${kmText} · TomTom estimé`;
-    const speech = `Estimation trafic, ${Math.round(hourly)} euros par heure. ${hourlyOk ? 'Objectif horaire atteint' : 'Sous objectif horaire'}. ${kmWeak ? 'Attention aux kilomètres.' : ''}`;
-    return { ...base, title: label, body, speech, verdict: !hourlyOk || kmWeak ? 'faible' : kmRate === null ? 'partiel' : 'favorable', speak: !!cfg.voice };
+    // Three immediate outcomes. The local km threshold can downgrade "BON" to "MOYEN".
+    // A marginal hourly outcome is never promoted by a favorable km rate.
+    const grade = hourly < target * 0.90 ? 'MAUVAIS'
+      : hourly < target || kmWeak || kmRate === null ? 'MOYEN' : 'BON';
+    const symbol = grade === 'BON' ? '🟢' : grade === 'MOYEN' ? '🟠' : '🔴';
+    const fmt = n => n.toFixed(1).replace('.', ',');
+    const title = `${symbol} ${grade} · ${fmt(hourly)} €/h`;
+    const body = `${price.toFixed(2).replace('.', ',')} € · ${minutes} min · ${kmRate === null ? '€/km —' : kmRate.toFixed(2).replace('.', ',') + ' €/km'}`;
+    // Keep complete analysis in the local journal, only shorten the real-time alert.
+    return { ...base, title, body, speech: grade.toLowerCase(), verdict: grade === 'BON' ? 'favorable' : grade === 'MOYEN' ? 'partiel' : 'faible', speak: !!cfg.voice };
 }
 /** Appelé après l'affichage : enregistre l'instant de restitution (mesure) ; synchronise si demandé. */
 async function runPost(rt, input) {
