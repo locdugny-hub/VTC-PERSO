@@ -160,9 +160,9 @@ function videoPair(raw) {
    const l=lines[i];
    if(!l||tripRe.test(l)||approachRe.test(l)||skip.test(l)||/€|^\d+(?:[.,]\d+)?\s*km$/i.test(l))break;
    out.push(l);
-   if(/\b\d{5}\b/.test(l)&&!/-$/.test(l))break;
+   if(/\b\d{5}\b/.test(l)&&!/-$/.test(l)&&!/,\s*$/.test(l)&&!/(?:Savigny|Paris)-$/i.test(l))break;
   }
-  return out.join(' ').replace(/\s+([,])/g,'$1').trim();
+  return out.join(' ').replace(/-\s+(?=[a-zà-ÿ])/gi,'-').replace(/\s+([,])/g,'$1').replace(/\s*[·•]\s*$/,'').trim();
  };
  const ai=lines.findIndex(l=>approachRe.test(l));
  const ti=lines.findIndex((l,i)=>i>ai&&tripRe.test(l));
@@ -174,7 +174,7 @@ function videoPair(raw) {
  // Bolt green card: destination and distance can share a line, or distance is on the next line.
  const candidates=[];
  for(const l of lines){
-  const v=l.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,'').trim();
+  const v=l.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,'').replace(/\s*[·•]\s*$/,'').trim();
   if(v&&!skip.test(v)&&!/€|^<\s*1\s*min|^\d+\s*min|^\d+(?:[.,]\d+)?\s*km$/i.test(v)&&/\b(rue|av\.?|avenue|bd\.?|boulevard|gare|aéroport|airport|parc|terminal|disneyland|rer|chessy|orly|bobigny|paris|asnières|savigny|survilliers|fosses)\b/i.test(v))candidates.push(v);
  }
  if(candidates.length>=2)return {pickup:candidates[0],destination:candidates[1]};
