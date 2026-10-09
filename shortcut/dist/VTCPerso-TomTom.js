@@ -211,12 +211,11 @@ function boltGreenOffer(card) {
  const approachKm=app[3]?Number(app[3])/1000:Number(app[2].replace(',','.'));
  const after=lines.slice(ai+1);
  const stop=after.findIndex(l=>/^\s*(?:bolt\b|[12](?:[.,]\d+)?\s*x?\s*forte demande|accepter|accept|refuser|decline)\b/i.test(l));
- const placeLines=(stop<0?after:after.slice(0,stop)).filter(l=>!/\b(?:net|ttc|espèces|cash|forte demande)\b|€/.test(l)&&!/^[\s°º•·*\-\d]+$/.test(l)&&/[a-zà-ÿ]{3}/i.test(l));
- const withDistance=placeLines.findIndex(l=>/\d+(?:[.,]\d+)?\s*km\b/.test(l));
- if(withDistance<0||!placeLines.length)return null;
- let tripKm=null;
- const distLine=placeLines[withDistance],dm=distLine.match(/(\d+(?:[.,]\d+)?)\s*km\b/i);
- tripKm=dm?Number(dm[1].replace(',','.')):null;
+ const area=stop<0?after:after.slice(0,stop);
+ const distanceMatch=area.join(' ').match(/(\d+(?:[.,]\d+)?)\s*km\b/i);
+ const tripKm=distanceMatch?Number(distanceMatch[1].replace(',','.')):null;
+ if(!Number.isFinite(tripKm)||tripKm<=0)return null;
+ const placeLines=area.filter(l=>!/\b(?:net|ttc|espèces|cash|forte demande)\b|€/.test(l)&&!/^[\s°º•·*\-\d]+$/.test(l)&&/[a-zà-ÿ]{3}/i.test(l));
  const cleaned=placeLines.map(l=>l.replace(/\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\b/i,'').trim()).filter(l=>l&&!/^\d+(?:[.,]\d+)?\s*km$/i.test(l));
  // Some Bolt cards put distance on the same line as drop-off, others on its own line.
  const pickup=cleaned[0]?.replace(/^[°•·\s]+/,'').trim();
