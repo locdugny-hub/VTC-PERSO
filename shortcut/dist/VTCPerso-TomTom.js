@@ -197,6 +197,31 @@ function videoPair(raw) {
  if(candidates.length>=2)return {pickup:candidates[0],destination:candidates[1]};
  return null;
 }
+
+function boltGreenOffer(card) {
+ const lines=String(card||'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const ai=lines.findIndex(l=>/^\s*(?:<\s*1|\d{1,2})\s*min\s*[·•]\s*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)/i.test(l));
+ if(ai<0)return null;
+ const money=lines.map((l,i)=>({l,i})).filter(v=>/€/.test(v.l)&&/\bnet\b/i.test(v.l));
+ if(!money.length)return null;
+ const selected=money.sort((a,b)=>Math.abs(a.i-ai)-Math.abs(b.i-ai))[0].l;
+ const priceMatch=selected.match(/(\d{1,4}(?:[.,]\d{2})?)\s*€/);
+ if(!priceMatch)return null;
+ const price=Number(priceMatch[1].replace(',','.'));
+ const app=lines[ai].match(/(<\s*1|\d{1,2})\s*min\s*[·•]\s*(?:(\d+(?:[.,]\d+)?)\s*km|(\d+)\s*m)/i);
+ if(!app)return null;
+ const approachMin=app[1].includes('<')?1:Number(app[1]);
+ const approachKm=app[3]?Number(app[3])/1000:Number(app[2].replace(',','.'));
+ const candidates=lines.slice(ai+1).filter(x=>!/\b(?:bolt|net|ttc|espèces|cash|forte demande|accepter|accept|refuser)\b|€|^\d+(?:[.,]\d+)?\s*km$/i.test(x));
+ if(candidates.length<2)return null;
+ const pickup=candidates[0].replace(/^[°•·\s]+/,'').trim();
+ const destination=candidates[1].replace(/^[°•·\s]+/,'').replace(/\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\s*$/,'').trim();
+ const distanceInline=candidates[1].match(/[·•]\s*(\d+(?:[.,]\d+)?)\s*km\b/i);
+ const distanceSeparate=lines.slice(ai+2).join(' ').match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*km\b/i);
+ const tripKm=Number((distanceInline?.[1]||distanceSeparate?.[1]||'').replace(',','.'));
+ if(!pickup||!destination||!Number.isFinite(price)||!Number.isFinite(tripKm)||tripKm<=0)return null;
+ return {offer:{price,approachMin,approachKm,tripKm,tripMin:null},pair:{pickup,destination}};
+}
 function videoVerdict(base, offer, tripMin, hasTraffic) {
  if(!Number.isFinite(tripMin)||tripMin<=0)return { ...base,show:true,title:'⚪ INCOMPLET',body:'Durée trajet indisponible',speech:'',speak:false,verdict:'incomplet'};
  const minutes=offer.approachMin+tripMin, hour=60*offer.price/minutes;
@@ -218,10 +243,11 @@ async function runAnalyzeTraffic(rt, input) {
     input = { ...input, text: labeled };
     const base = runAnalyze(rt, input);
     const cardText = offerCardText(raw);
-    const offer = parseVideoOffer(cardText);
+    const boltCard = boltGreenOffer(cardText);
+    const offer = boltCard?.offer || parseVideoOffer(cardText);
     if (offer) {
       base.speak = !!rt.readJson('config.json')?.voice;
-      const pair = videoPair(cardText) || extractUberAddresses(cardText);
+      const pair = boltCard?.pair || videoPair(cardText) || extractUberAddresses(cardText);
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
       if (pair && rt.hasToken()) {
