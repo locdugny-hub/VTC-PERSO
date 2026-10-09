@@ -166,7 +166,6 @@ async function runAnalyzeTraffic(rt, input) {
       const pair = videoPair(raw) || extractUberAddresses(raw);
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
-      if (offer.tripMin !== null) return videoVerdict(base, offer, offer.tripMin, false);
       if (pair && rt.hasToken()) {
         const route = await rt.trafficRoute(pair.pickup, pair.destination);
         if (route?.error)
