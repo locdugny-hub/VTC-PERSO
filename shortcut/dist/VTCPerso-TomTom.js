@@ -135,7 +135,7 @@ async function runAnalyzeTraffic(rt, input) {
     const target = 25;
     // Kilometer economics follow the existing configured local analyzer;
     // do not invent an extra €/km threshold or ignore its low verdict.
-    const localKmMatch = String(base.title ?? '').match(/(\\d+(?:[.,]\\d+)?)\\s*€\\s*\\/\\s*km/i);
+    const localKmMatch = String(base.title ?? '').match(/(\d+(?:[.,]\d+)?)\s*€\s*\/\s*km/i);
     const kmRate = localKmMatch ? Number(localKmMatch[1].replace(',', '.')) : null;
     const kmWeak = kmRate !== null && base.verdict === 'faible';
     const hourlyOk = hourly >= target;
