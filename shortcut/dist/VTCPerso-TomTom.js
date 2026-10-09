@@ -221,7 +221,6 @@ async function runAnalyzeTraffic(rt, input) {
     const offer = parseVideoOffer(cardText);
     if (offer) {
       base.speak = !!rt.readJson('config.json')?.voice;
-      if (/\b(?:Barcelona|Spain|Espagne)\b/i.test((videoPair(cardText)?.destination)||'')) return {...base,show:true,title:'⚪ HORS ZONE',body:'Destination hors zone TomTom configurée',speech:'',speak:false,verdict:'incomplet'};
       const pair = videoPair(cardText) || extractUberAddresses(cardText);
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
