@@ -151,8 +151,8 @@ function parseVideoOffer(raw) {
 }
 function videoPair(raw) {
  const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
- const approachRe=/^(?:<\s*1|\d{1,3})\s*min\b.*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i;
- const tripRe=/^(?:\d{1,3})\s*min\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\b|^course\s+de\s+\d+(?:[.,]\d+)?\s*km\b/i;
+ const approachRe=/^[°º•·*\s]*(?:<\s*1|\d{1,3})\s*min\b.*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i;
+ const tripRe=/^[°º•·*\s]*(?:\d{1,3})\s*min\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\b|^[°º•·*\s]*course\s+de\s+\d+(?:[.,]\d+)?\s*km\b/i;
  const skip=/^(?:accepter|accept|refuser|decline|sur l.app|espèces|cash|forte demande|bolt\b|uber\b)/i;
  const readPlace=(start,end)=>{
   const out=[];
