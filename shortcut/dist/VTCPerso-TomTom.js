@@ -116,30 +116,57 @@ function compactFallback(base) {
 // Screenshot offer formats may come from video screenshots, not just native Uber UI.
 function parseVideoOffer(raw) {
  const t=String(raw||'').replace(/\u00a0/g,' ').replace(/[•·]/g,' · ');
- const euro=t.match(/(\d{1,4}(?:[.,]\d{1,2})?)\s*€/);
- if(!euro)return null;
- const price=Number(euro[1].replace(',','.'));
- if(!Number.isFinite(price)||price<=0)return null;
- const approach=t.match(/(\d{1,3})\s*min\s*(?:\(\s*(?:à\s*)?(\d+(?:[.,]\d+)?)\s*km\s*\)|·\s*(\d+(?:[.,]\d+)?)\s*km)/i);
+ const lines=t.replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const money=/(?:€\s*)?(\d{1,3}(?:[ ,.]?\d{3})*(?:[.,]\d{2})|\d{1,4}(?:[.,]\d{1,2})?)\s*€/g;
+ const moneyPrefix=/€\s*(\d{1,3}(?:[,.]\d{3})*(?:[.,]\d{2})|\d{1,4}(?:[.,]\d{1,2})?)/g;
+ const prices=[];
+ const add=(v,line,index)=>{let num=String(v).replace(/[\s,\.](?=\d{3}(?:[.,]|$))/g,'').replace(',','.');const value=Number(num);if(Number.isFinite(value)&&value>0)prices.push({value,line,index});};
+ lines.forEach((line,index)=>{for(const m of line.matchAll(money))add(m[1],line,index);for(const m of line.matchAll(moneyPrefix))add(m[1],line,index);});
+ if(!prices.length)return null;
+ // Avoid toll fee, discount or fare-per-km amounts taking precedence over the net payout.
+ const eligible=prices.filter(p=>!/toll|péage|frais de route|fee|bonus|km|\/h/i.test(p.line));
+ const ranked=(eligible.length?eligible:prices).map(p=>{
+  const around=(lines.slice(Math.max(0,p.index-1),p.index+2).join(' '));
+  return {...p,score:(/\bnet\b|montant net|net[, ]*ttc/i.test(around)?10:0)+(/\btotal\b/i.test(p.line)?2:0)+Math.min(p.value,10000)/100000};
+ }).sort((a,b)=>b.score-a.score);
+ const price=ranked[0].value;
+ const approach=t.match(/(<\s*1|\d{1,3})\s*min\s*(?:\(\s*(?:à\s*)?(\d+(?:[.,]\d+)?)\s*km\s*\)|·\s*(\d+(?:[.,]\d+)?)\s*km|·\s*(\d{1,4})\s*m\b)/i);
+ if(!approach)return null;
+ const approachMin=approach[1].includes('<')?1:Number(approach[1]); // conservative ceiling of <1 min
+ const approachKm=approach[4]?Number(approach[4])/1000:Number((approach[2]||approach[3]).replace(',','.'));
  const course=t.match(/course\s+de\s+(\d+(?:[.,]\d+)?)\s*km/i);
- const durations=[...t.matchAll(/(\d{1,3})\s*min\s*·\s*(\d+(?:[.,]\d+)?)\s*km/gi)];
- if(!approach||(!course&&durations.length<2))return null;
- const approachMin=Number(approach[1]),approachKm=Number((approach[2]||approach[3]).replace(',','.'));
- const tripKm=Number((course?.[1]||durations[1][2]).replace(',','.'));
- const tripMin=course?null:Number(durations[1][1]);
- if(![approachMin,approachKm,tripKm].every(Number.isFinite)||approachMin<0||approachMin>90||approachKm<0||tripKm<=0)return null;
+ const durationPairs=[...t.matchAll(/(\d{1,3})\s*min\s*·\s*(\d+(?:[.,]\d+)?)\s*km/gi)];
+ let tripKm=course?Number(course[1].replace(',','.')):null;
+ let tripMin=null;
+ if(tripKm===null && durationPairs.length>1){tripMin=Number(durationPairs[1][1]);tripKm=Number(durationPairs[1][2].replace(',','.'));}
+ if(tripKm===null){
+  const ai=lines.findIndex(x=>/<\s*1\s*min|\d+\s*min\s*[·(]/i.test(x));
+  for(let i=Math.max(0,ai+1);i<lines.length;i++){
+   const m=lines[i].match(/(?:^|[•·\s])(\d+(?:[.,]\d+)?)\s*km\b/i);
+   if(m && !/min\b/i.test(lines[i])){tripKm=Number(m[1].replace(',','.'));break;}
+  }
+ }
+ if(!Number.isFinite(tripKm)||tripKm<=0||!Number.isFinite(approachMin)||!Number.isFinite(approachKm))return null;
  return {price,approachMin,approachKm,tripKm,tripMin};
 }
 function videoPair(raw) {
  const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const clean=x=>x.replace(/\s+/g,' ').replace(/\s*,\s*/g,', ').trim();
  const entries=[];
  for(let i=0;i<lines.length;i++){
-  let a=lines[i].replace(/\s+/g,' ');
+  let a=clean(lines[i]);
   if(!/^\d{1,4}\s+(?:rue|av\.?|avenue|bd\.?|boulevard|place|allée|allee|route|quai|impasse|passage|cours)(?:\s|$)/i.test(a))continue;
-  for(let j=i+1;j<=Math.min(i+2,lines.length-1)&&!/\b\d{5}\b/.test(a);j++)a+=' '+lines[j];
-  if(/\b\d{5}\b/.test(a))entries.push(a);
+  let j=i;
+  while(!/\b\d{5}\b/.test(a)&&j+1<lines.length&&j<i+2 && !/^\d{1,3}\s*min\b|^course\b/i.test(lines[j+1]))a+=' '+clean(lines[++j]);
+  if(a.length<=200)entries.push(a);
  }
- return entries.length>=2?{pickup:entries[0],destination:entries[1]}:null;
+ if(entries.length>=2)return {pickup:entries[0],destination:entries[1]};
+ // Bolt's green card uses pickup and destination as two unnumbered place names.
+ const idx=lines.findIndex(l=>(/<\s*1|\d{1,2})\s*min\s*·\s*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i.test(l));
+ if(idx<0)return null;
+ const nearby=lines.slice(idx+1).filter(l=>!/\bnet\b|ttc|€|accepter|accept|espèces|cash|demande|refuser|bolt\s*[·•]|^\d+(?:[.,]\d+)?\s*km$/i.test(l));
+ const pickup=nearby[0],destination=nearby[1];
+ return pickup&&destination?{pickup,destination}:null;
 }
 function videoVerdict(base, offer, tripMin, hasTraffic) {
  if(!Number.isFinite(tripMin)||tripMin<=0)return { ...base,show:true,title:'⚪ INCOMPLET',body:'Durée trajet indisponible',speech:'',speak:false,verdict:'incomplet'};
