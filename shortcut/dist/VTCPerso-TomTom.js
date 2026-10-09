@@ -199,27 +199,29 @@ function videoPair(raw) {
 }
 
 function boltGreenOffer(card) {
- const lines=String(card||'').split('\n').map(x=>x.trim()).filter(Boolean);
- const ai=lines.findIndex(l=>/^\s*(?:<\s*1|\d{1,2})\s*min\s*[·•]\s*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)/i.test(l));
+ const lines=String(card||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const ai=lines.findIndex(l=>/(?:<\s*1|\d{1,2})\s*min\s*[·•.]\s*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i.test(l));
  if(ai<0)return null;
- const money=lines.map((l,i)=>({l,i})).filter(v=>/€/.test(v.l)&&/\bnet\b/i.test(v.l));
- if(!money.length)return null;
- const selected=money.sort((a,b)=>Math.abs(a.i-ai)-Math.abs(b.i-ai))[0].l;
- const priceMatch=selected.match(/(\d{1,4}(?:[.,]\d{2})?)\s*€/);
- if(!priceMatch)return null;
- const price=Number(priceMatch[1].replace(',','.'));
- const app=lines[ai].match(/(<\s*1|\d{1,2})\s*min\s*[·•]\s*(?:(\d+(?:[.,]\d+)?)\s*km|(\d+)\s*m)/i);
- if(!app)return null;
+ const priceLine=lines.find(l=>/\d+[,.]\d{2}\s*€/.test(l)&&/\bnet\b/i.test(l));
+ const pm=priceLine?.match(/(\d{1,4}[,.]\d{2})\s*€/);
+ const app=lines[ai].match(/(<\s*1|\d{1,2})\s*min\s*[·•.]\s*(?:(\d+(?:[.,]\d+)?)\s*km|(\d+)\s*m)\b/i);
+ if(!pm||!app)return null;
+ const price=Number(pm[1].replace(',','.'));
  const approachMin=app[1].includes('<')?1:Number(app[1]);
  const approachKm=app[3]?Number(app[3])/1000:Number(app[2].replace(',','.'));
- const candidates=lines.slice(ai+1).filter(x=>!/\b(?:bolt|net|ttc|espèces|cash|forte demande|accepter|accept|refuser)\b|€|^\d+(?:[.,]\d+)?\s*km$/i.test(x));
- if(candidates.length<2)return null;
- const pickup=candidates[0].replace(/^[°•·\s]+/,'').trim();
- const destination=candidates[1].replace(/^[°•·\s]+/,'').replace(/\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\s*$/,'').trim();
- const distanceInline=candidates[1].match(/[·•]\s*(\d+(?:[.,]\d+)?)\s*km\b/i);
- const distanceSeparate=lines.slice(ai+2).join(' ').match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*km\b/i);
- const tripKm=Number((distanceInline?.[1]||distanceSeparate?.[1]||'').replace(',','.'));
- if(!pickup||!destination||!Number.isFinite(price)||!Number.isFinite(tripKm)||tripKm<=0)return null;
+ const after=lines.slice(ai+1);
+ const stop=after.findIndex(l=>/^\s*(?:bolt\b|[12](?:[.,]\d+)?\s*x?\s*forte demande|accepter|accept|refuser|decline)\b/i.test(l));
+ const placeLines=(stop<0?after:after.slice(0,stop)).filter(l=>!/\b(?:net|ttc|espèces|cash|forte demande)\b|€/.test(l));
+ const withDistance=placeLines.findIndex(l=>/\d+(?:[.,]\d+)?\s*km\b/.test(l));
+ if(withDistance<0||!placeLines.length)return null;
+ let tripKm=null;
+ const distLine=placeLines[withDistance],dm=distLine.match(/(\d+(?:[.,]\d+)?)\s*km\b/i);
+ tripKm=dm?Number(dm[1].replace(',','.')):null;
+ const cleaned=placeLines.map(l=>l.replace(/\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\b/i,'').trim()).filter(l=>l&&!/^\d+(?:[.,]\d+)?\s*km$/i.test(l));
+ // Some Bolt cards put distance on the same line as drop-off, others on its own line.
+ const pickup=cleaned[0]?.replace(/^[°•·\s]+/,'').trim();
+ const destination=cleaned.slice(1).join(' ').replace(/^[°•·\s]+/,'').trim();
+ if(!pickup||!destination||pickup===destination||!Number.isFinite(price)||!Number.isFinite(tripKm)||tripKm<=0)return null;
  return {offer:{price,approachMin,approachKm,tripKm,tripMin:null},pair:{pickup,destination}};
 }
 function videoVerdict(base, offer, tripMin, hasTraffic) {
