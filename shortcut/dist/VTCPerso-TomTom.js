@@ -165,7 +165,7 @@ function videoPair(raw) {
  const idx=lines.findIndex(l=>(/<\s*1|\d{1,2})\s*min\s*·\s*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i.test(l));
  if(idx<0)return null;
  const nearby=lines.slice(idx+1).filter(l=>!/\bnet\b|ttc|€|accepter|accept|espèces|cash|demande|refuser|bolt\s*[·•]|^\d+(?:[.,]\d+)?\s*km$/i.test(l));
- const pickup=nearby[0],destination=nearby[1];
+ const pickup=nearby[0]?.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,''),destination=nearby[1]?.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,'');
  return pickup&&destination?{pickup,destination}:null;
 }
 function videoVerdict(base, offer, tripMin, hasTraffic) {
@@ -190,6 +190,8 @@ async function runAnalyzeTraffic(rt, input) {
     const base = runAnalyze(rt, input);
     const offer = parseVideoOffer(raw);
     if (offer) {
+      base.speak = !!rt.readJson('config.json')?.voice;
+      if (/\b(?:Barcelona|Spain|Espagne)\b/i.test(raw)) return {...base,show:true,title:'⚪ HORS ZONE',body:'Destination hors zone TomTom configurée',speech:'',speak:false,verdict:'incomplet'};
       const pair = videoPair(raw) || extractUberAddresses(raw);
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
