@@ -258,7 +258,7 @@ async function runAnalyzeTraffic(rt, input) {
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
           return videoVerdict(base, offer, route.trip_minutes, true);
       }
-      return {...base,show:true,title:'⚪ INCOMPLET',body:!pair?'Lieux non lus':!rt.hasToken()?'Jeton absent':route?.trip_km != null ? 'TomTom ' + String(route.trip_km).replace('.',',') + ' km / offre ' + String(offer.tripKm).replace('.',',') + ' km' : 'Distance TomTom inconnue',speech:'',speak:false,verdict:'incomplet'};
+      return {...base,show:true,title:'⚪ INCOMPLET',body:!pair?'Lieux non lus (v-BOLT-3)':!rt.hasToken()?'Jeton absent':route?.trip_km != null ? 'TomTom ' + String(route.trip_km).replace('.',',') + ' km / offre ' + String(offer.tripKm).replace('.',',') + ' km' : 'Distance TomTom inconnue',speech:'',speak:false,verdict:'incomplet'};
     }
     if (!base.show || !rt.hasToken())
         return compactFallback(base);
