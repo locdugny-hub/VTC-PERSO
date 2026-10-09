@@ -110,7 +110,7 @@ function compactFallback(base) {
     const amount = String(base.body ?? '').match(/\b\d+(?:[.,]\d{1,2})?\s*€/i)?.[0] ?? '';
     return { ...base, title: icon + ' ' + grade + ' · sans trafic',
       body: [amount, km].filter(Boolean).join(' · ') || 'Analyse partielle',
-      speech: grade.toLowerCase(), verdict: grade.toLowerCase(), speak: base.speak };
+      speech: 'Analyse indisponible', verdict: 'incomplet', speak: base.speak };
 }
 
 // Screenshot offer formats may come from video screenshots, not just native Uber UI.
@@ -150,7 +150,7 @@ function videoVerdict(base, offer, tripMin, hasTraffic) {
  const fmt=(n,d=1)=>n.toFixed(d).replace('.',',');
  return {...base,show:true,title:icon+' '+grade+' · '+fmt(hour)+' €/h',
   body:fmt(offer.price,2)+' € · '+minutes+' min · '+fmt(km,2)+' €/km'+(hasTraffic?'':' · sans trafic'),
-  speech:grade.toLowerCase(),verdict:grade.toLowerCase(),speak:base.speak};
+  speech:grade.toLowerCase()+', '+Math.round(hour)+' euros de l’heure',verdict:grade.toLowerCase(),speak:base.speak};
 }
 async function runAnalyzeTraffic(rt, input) {
     // Uber OCR: approach without a label directly after "Montant net de frais".
@@ -213,7 +213,7 @@ async function runAnalyzeTraffic(rt, input) {
     const title = `${symbol} ${grade} · ${fmt(hourly)} €/h`;
     const body = `${price.toFixed(2).replace('.', ',')} € · ${minutes} min · ${kmRate === null ? '€/km —' : kmRate.toFixed(2).replace('.', ',') + ' €/km'}`;
     // Keep complete analysis in the local journal, only shorten the real-time alert.
-    return { ...base, title, body, speech: grade.toLowerCase(), verdict: grade.toLowerCase(), speak: !!cfg.voice };
+    return { ...base, title, body, speech: grade.toLowerCase() + ', ' + Math.round(hourly) + ' euros de l’heure', verdict: grade.toLowerCase(), speak: !!cfg.voice };
 }
 /** Appelé après l'affichage : enregistre l'instant de restitution (mesure) ; synchronise si demandé. */
 async function runPost(rt, input) {
