@@ -99,6 +99,13 @@ function extractUberAddresses(text) {
     return found.length >= 2 && found[0] !== found[1] ? { pickup: found[0], destination: found[1] } : null;
 }
 async function runAnalyzeTraffic(rt, input) {
+    // Uber OCR: approach without a label directly after "Montant net de frais".
+    const raw = typeof input.text === 'string' ? input.text : '';
+    const labeled = /montant net de frais/i.test(raw)
+      ? raw.replace(/(^|\n)([ \t]*[•·*-]?[ \t]*)(\d{1,2}[ \t]*min[ \t]*\([ \t]*\d+(?:[.,]\d+)?[ \t]*km[ \t]*\))/im,
+          '$1Approche : $3')
+      : raw;
+    input = { ...input, text: labeled };
     const base = runAnalyze(rt, input);
     if (!base.show || !rt.hasToken() || !/\buber\b|uberx/i.test(input.text ?? ''))
         return base;
