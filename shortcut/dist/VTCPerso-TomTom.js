@@ -255,7 +255,7 @@ async function runAnalyzeTraffic(rt, input) {
       if (pair && rt.hasToken()) {
         const route = await rt.trafficRoute(pair.pickup, pair.destination);
         if (route?.error)
-          return {...base,show:true,title:'⚪ INCOMPLET',body:({quota_journalier:'Quota journalier',trop_de_demandes:'Limite de débit',geocodage:'Lieu non reconnu par TomTom',serveur:'Erreur serveur TomTom',delai_reseau:'Délai réseau dépassé'})[route.error]||'TomTom indisponible',speech:'',speak:false,verdict:'incomplet'};
+          return {...base,show:true,title:'⚪ INCOMPLET',body:({quota_journalier:'Quota journalier',trop_de_demandes:'Limite de débit',geocodage:'Lieu non reconnu par TomTom',serveur:'Erreur serveur TomTom',delai_reseau:'Délai réseau dépassé',invalid_addresses:'Adresses OCR invalides'})[route.error]||'TomTom indisponible',speech:'',speak:false,verdict:'incomplet'};
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
           return videoVerdict(base, offer, route.trip_minutes, true);
       }
@@ -2110,9 +2110,11 @@ function createRuntime() {
             req.method = 'POST';
             req.timeoutInterval = 11;
             req.headers = { 'content-type': 'application/json', 'x-device-token': Keychain.get(TOKEN_KEY) };
-            req.body = JSON.stringify({ pickup, destination });
+            const normalizePlace = value => String(value ?? '').replace(/[<>]/g, ' ').replace(/[\u0000-\u001f]/g, ' ').replace(/\s+/g, ' ').trim();
+            req.body = JSON.stringify({ pickup: normalizePlace(pickup), destination: normalizePlace(destination) });
             try {
                 const data = await req.loadJSON();
+                if (req.response.statusCode === 400) return { error: 'invalid_addresses' };
                 if (req.response.statusCode === 429)
                     return { error: data?.error === 'daily_free_limit' ? 'quota_journalier' : 'trop_de_demandes' };
                 if (req.response.statusCode !== 200 || !Number.isFinite(data.trip_minutes) || !Number.isFinite(data.trip_km))
