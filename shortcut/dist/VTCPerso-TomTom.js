@@ -211,7 +211,7 @@ function boltGreenOffer(card) {
  const approachKm=app[3]?Number(app[3])/1000:Number(app[2].replace(',','.'));
  const after=lines.slice(ai+1);
  const stop=after.findIndex(l=>/^\s*(?:bolt\b|[12](?:[.,]\d+)?\s*x?\s*forte demande|accepter|accept|refuser|decline)\b/i.test(l));
- const placeLines=(stop<0?after:after.slice(0,stop)).filter(l=>!/\b(?:net|ttc|espèces|cash|forte demande)\b|€/.test(l));
+ const placeLines=(stop<0?after:after.slice(0,stop)).filter(l=>!/\b(?:net|ttc|espèces|cash|forte demande)\b|€/.test(l)&&!/^[\s°º•·*\-\d]+$/.test(l)&&/[a-zà-ÿ]{3}/i.test(l));
  const withDistance=placeLines.findIndex(l=>/\d+(?:[.,]\d+)?\s*km\b/.test(l));
  if(withDistance<0||!placeLines.length)return null;
  let tripKm=null;
