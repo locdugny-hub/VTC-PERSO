@@ -150,23 +150,35 @@ function parseVideoOffer(raw) {
  return {price,approachMin,approachKm,tripKm,tripMin};
 }
 function videoPair(raw) {
- const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
- const clean=x=>x.replace(/\s+/g,' ').replace(/\s*,\s*/g,', ').trim();
- const entries=[];
- for(let i=0;i<lines.length;i++){
-  let a=clean(lines[i]);
-  if(!/^\d{1,4}\s+(?:rue|av\.?|avenue|bd\.?|boulevard|place|allée|allee|route|quai|impasse|passage|cours)(?:\s|$)/i.test(a))continue;
-  let j=i;
-  while(!/\b\d{5}\b/.test(a)&&j+1<lines.length&&j<i+2 && !/^\d{1,3}\s*min\b|^course\b/i.test(lines[j+1]))a+=' '+clean(lines[++j]);
-  if(a.length<=200)entries.push(a);
+ const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
+ const approachRe=/^(?:<\s*1|\d{1,3})\s*min\b.*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i;
+ const tripRe=/^(?:\d{1,3})\s*min\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\b|^course\s+de\s+\d+(?:[.,]\d+)?\s*km\b/i;
+ const skip=/^(?:accepter|accept|refuser|decline|sur l.app|espèces|cash|forte demande|bolt\b|uber\b)/i;
+ const readPlace=(start,end)=>{
+  const out=[];
+  for(let i=start;i<Math.min(end,start+4);i++){
+   const l=lines[i];
+   if(!l||tripRe.test(l)||approachRe.test(l)||skip.test(l)||/€|^\d+(?:[.,]\d+)?\s*km$/i.test(l))break;
+   out.push(l);
+   if(/\b\d{5}\b/.test(l)&&!/-$/.test(l))break;
+  }
+  return out.join(' ').replace(/\s+([,])/g,'$1').trim();
+ };
+ const ai=lines.findIndex(l=>approachRe.test(l));
+ const ti=lines.findIndex((l,i)=>i>ai&&tripRe.test(l));
+ if(ai>=0&&ti>ai){
+  const pickup=readPlace(ai+1,ti);
+  const destination=readPlace(ti+1,lines.length);
+  if(pickup&&destination&&pickup!==destination)return {pickup,destination};
  }
- if(entries.length>=2)return {pickup:entries[0],destination:entries[1]};
- // Bolt's green card uses pickup and destination as two unnumbered place names.
- const idx=lines.findIndex(l=>(/<\s*1|\d{1,2})\s*min\s*·\s*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i.test(l));
- if(idx<0)return null;
- const nearby=lines.slice(idx+1).filter(l=>!/\bnet\b|ttc|€|accepter|accept|espèces|cash|demande|refuser|bolt\s*[·•]|^\d+(?:[.,]\d+)?\s*km$/i.test(l));
- const pickup=nearby[0]?.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,''),destination=nearby[1]?.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,'');
- return pickup&&destination?{pickup,destination}:null;
+ // Bolt green card: destination and distance can share a line, or distance is on the next line.
+ const candidates=[];
+ for(const l of lines){
+  const v=l.replace(/\s*[•·]\s*\d+(?:[.,]\d+)?\s*km\s*$/i,'').trim();
+  if(v&&!skip.test(v)&&!/€|^<\s*1\s*min|^\d+\s*min|^\d+(?:[.,]\d+)?\s*km$/i.test(v)&&/\b(rue|av\.?|avenue|bd\.?|boulevard|gare|aéroport|airport|parc|terminal|disneyland|rer|chessy|orly|bobigny|paris|asnières|savigny|survilliers|fosses)\b/i.test(v))candidates.push(v);
+ }
+ if(candidates.length>=2)return {pickup:candidates[0],destination:candidates[1]};
+ return null;
 }
 function videoVerdict(base, offer, tripMin, hasTraffic) {
  if(!Number.isFinite(tripMin)||tripMin<=0)return { ...base,show:true,title:'⚪ INCOMPLET',body:'Durée trajet indisponible',speech:'',speak:false,verdict:'incomplet'};
