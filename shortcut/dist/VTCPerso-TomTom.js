@@ -174,7 +174,7 @@ async function runAnalyzeTraffic(rt, input) {
       }
       return {...base,show:true,title:'⚪ INCOMPLET',body:'Trajet non vérifié',speech:'',speak:false,verdict:'incomplet'};
     }
-    if (!base.show || !rt.hasToken() || !/\buber\b|uberx/i.test(input.text ?? ''))
+    if (!base.show || !rt.hasToken())
         return compactFallback(base);
     const pair = extractUberAddresses(input.text ?? '');
     if (!pair)
@@ -192,7 +192,7 @@ async function runAnalyzeTraffic(rt, input) {
     const amountLine = lines.find(l => /^\s*\d{1,4}(?:[.,]\d{1,2})?\s*€\s*$/.test(l));
     const price = amountLine ? Number(amountLine.replace(/[^0-9,.]/g, '').replace(',', '.')) : NaN;
     const approach = (input.text ?? '').match(/(\d{1,2})\s*min\s*\(\s*\d+(?:[.,]\d+)?\s*km\s*\)/i);
-    if (!Number.isFinite(price) || price <= 0 || !approach || !/montant net de frais/i.test(input.text ?? ''))
+    if (!Number.isFinite(price) || price <= 0 || !approach)
         return compactFallback(base);
     const minutes = Number(approach[1]) + route.trip_minutes;
     const hourly = 60 * price / minutes;
