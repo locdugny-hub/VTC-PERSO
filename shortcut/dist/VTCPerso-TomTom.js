@@ -90,13 +90,16 @@ function runAnalyze(rt, input) {
 function extractUberAddresses(text) {
     const lines = text.replace(/\r/g, '').split('\n').map(x => x.trim()).filter(Boolean);
     const found = [];
-    for (const line of lines) {
-        const clean = line.replace(/^[•|\-\s]+/, '').replace(/\s+/g, ' ').trim();
-        if (/^\d{1,4}\s+(?:bis\s+)?(?:rue|avenue|av\.?|boulevard|bd\.?|place|allée|allee|chemin|route|quai|impasse|passage|cours)\s+.+/i.test(clean) && clean.length <= 200) {
-            found.push(clean);
+    for (let i=0;i<lines.length;i++) {
+        let clean = lines[i].replace(/^[•|\-\s]+/, '').replace(/\s+/g, ' ').trim();
+        if (!/^\d{1,4}\s+(?:bis\s+)?(?:rue|avenue|av\.?|boulevard|bd\.?|place|allée|allee|chemin|route|quai|impasse|passage|cours)\s+.+/i.test(clean)) continue;
+        // An OCR-wrapped address must include its postcode and city.
+        if (!/\b\d{5}\b/.test(clean) && i+1<lines.length && /\b\d{5}\b/.test(lines[i+1])) {
+            clean += ' ' + lines[++i].replace(/\s+/g,' ').trim();
         }
+        if (/\b\d{5}\b/.test(clean) && clean.length<=200) found.push(clean);
     }
-    return found.length >= 2 && found[0] !== found[1] ? { pickup: found[0], destination: found[1] } : null;
+    return found.length>=2 && found[0]!==found[1] ? {pickup:found[0],destination:found[1]} : null;
 }
 async function runAnalyzeTraffic(rt, input) {
     // Uber OCR: approach without a label directly after "Montant net de frais".
