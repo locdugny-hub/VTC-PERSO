@@ -112,6 +112,45 @@ function compactFallback(base) {
       body: [amount, km].filter(Boolean).join(' · ') || 'Analyse partielle',
       speech: grade.toLowerCase(), verdict: grade.toLowerCase(), speak: base.speak };
 }
+
+// Screenshot offer formats may come from video screenshots, not just native Uber UI.
+function parseVideoOffer(raw) {
+ const t=String(raw||'').replace(/\u00a0/g,' ').replace(/[•·]/g,' · ');
+ const euro=t.match(/(\d{1,4}(?:[.,]\d{1,2})?)\s*€/);
+ if(!euro)return null;
+ const price=Number(euro[1].replace(',','.'));
+ if(!Number.isFinite(price)||price<=0)return null;
+ const approach=t.match(/(\d{1,3})\s*min\s*(?:\(\s*(?:à\s*)?(\d+(?:[.,]\d+)?)\s*km\s*\)|·\s*(\d+(?:[.,]\d+)?)\s*km)/i);
+ const trip=t.match(/(?:course\s+de\s+(\d+(?:[.,]\d+)?)\s*km)|(?:(\d{1,3})\s*min\s*·\s*(\d+(?:[.,]\d+)?)\s*km)/i);
+ if(!approach||!trip)return null;
+ const approachMin=Number(approach[1]),approachKm=Number((approach[2]||approach[3]).replace(',','.'));
+ const tripKm=Number((trip[1]||trip[3]).replace(',','.'));
+ const tripMin=trip[2]?Number(trip[2]):null;
+ if(![approachMin,approachKm,tripKm].every(Number.isFinite)||approachMin<0||approachMin>90||approachKm<0||tripKm<=0)return null;
+ return {price,approachMin,approachKm,tripKm,tripMin};
+}
+function videoPair(raw) {
+ const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const entries=[];
+ for(let i=0;i<lines.length;i++){
+  let a=lines[i].replace(/\s+/g,' ');
+  if(!/^\d{1,4}\s+(?:rue|av\.?|avenue|bd\.?|boulevard|place|allée|allee|route|quai|impasse|passage|cours)\b/i.test(a))continue;
+  for(let j=i+1;j<=Math.min(i+2,lines.length-1)&&!/\b\d{5}\b/.test(a);j++)a+=' '+lines[j];
+  if(/\b\d{5}\b/.test(a))entries.push(a);
+ }
+ return entries.length>=2?{pickup:entries[0],destination:entries[1]}:null;
+}
+function videoVerdict(base, offer, tripMin, hasTraffic) {
+ if(!Number.isFinite(tripMin)||tripMin<=0)return { ...base,show:true,title:'⚪ INCOMPLET',body:'Durée trajet indisponible',speech:'',speak:false,verdict:'incomplet'};
+ const minutes=offer.approachMin+tripMin, hour=60*offer.price/minutes;
+ const km=offer.price/(offer.approachKm+offer.tripKm);
+ const grade=hour<22.5?'MAUVAIS':hour<25?'MOYEN':'BON';
+ const icon=grade==='BON'?'🟢':grade==='MOYEN'?'🟠':'🔴';
+ const fmt=(n,d=1)=>n.toFixed(d).replace('.',',');
+ return {...base,show:true,title:icon+' '+grade+' · '+fmt(hour)+' €/h',
+  body:fmt(offer.price,2)+' € · '+minutes+' min · '+fmt(km,2)+' €/km'+(hasTraffic?'':' · sans trafic'),
+  speech:grade.toLowerCase(),verdict:grade.toLowerCase(),speak:base.speak};
+}
 async function runAnalyzeTraffic(rt, input) {
     // Uber OCR: approach without a label directly after "Montant net de frais".
     const raw = typeof input.text === 'string' ? input.text : '';
@@ -121,6 +160,19 @@ async function runAnalyzeTraffic(rt, input) {
       : raw;
     input = { ...input, text: labeled };
     const base = runAnalyze(rt, input);
+    const offer = parseVideoOffer(raw);
+    if (offer) {
+      const pair = videoPair(raw) || extractUberAddresses(raw);
+      // When a screenshot provides a trip time directly, evaluate it immediately.
+      // For a distance-only offer, require a live TomTom route; never invent duration.
+      if (offer.tripMin !== null) return videoVerdict(base, offer, offer.tripMin, false);
+      if (pair && rt.hasToken()) {
+        const route = await rt.trafficRoute(pair.pickup, pair.destination);
+        if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
+          return videoVerdict(base, offer, route.trip_minutes, true);
+      }
+      return {...base,show:true,title:'⚪ INCOMPLET',body:'Trajet non vérifié',speech:'',speak:false,verdict:'incomplet'};
+    }
     if (!base.show || !rt.hasToken() || !/\buber\b|uberx/i.test(input.text ?? ''))
         return compactFallback(base);
     const pair = extractUberAddresses(input.text ?? '');
