@@ -121,11 +121,12 @@ function parseVideoOffer(raw) {
  const price=Number(euro[1].replace(',','.'));
  if(!Number.isFinite(price)||price<=0)return null;
  const approach=t.match(/(\d{1,3})\s*min\s*(?:\(\s*(?:à\s*)?(\d+(?:[.,]\d+)?)\s*km\s*\)|·\s*(\d+(?:[.,]\d+)?)\s*km)/i);
- const trip=t.match(/(?:course\s+de\s+(\d+(?:[.,]\d+)?)\s*km)|(?:(\d{1,3})\s*min\s*·\s*(\d+(?:[.,]\d+)?)\s*km)/i);
- if(!approach||!trip)return null;
+ const course=t.match(/course\s+de\s+(\d+(?:[.,]\d+)?)\s*km/i);
+ const durations=[...t.matchAll(/(\d{1,3})\s*min\s*·\s*(\d+(?:[.,]\d+)?)\s*km/gi)];
+ if(!approach||(!course&&durations.length<2))return null;
  const approachMin=Number(approach[1]),approachKm=Number((approach[2]||approach[3]).replace(',','.'));
- const tripKm=Number((trip[1]||trip[3]).replace(',','.'));
- const tripMin=trip[2]?Number(trip[2]):null;
+ const tripKm=Number((course?.[1]||durations[1][2]).replace(',','.'));
+ const tripMin=course?null:Number(durations[1][1]);
  if(![approachMin,approachKm,tripKm].every(Number.isFinite)||approachMin<0||approachMin>90||approachKm<0||tripKm<=0)return null;
  return {price,approachMin,approachKm,tripKm,tripMin};
 }
