@@ -227,7 +227,7 @@ function videoVerdict(base, offer, tripMin, hasTraffic) {
  if(!Number.isFinite(tripMin)||tripMin<=0)return { ...base,show:true,title:'⚪ INCOMPLET',body:'Durée trajet indisponible',speech:'',speak:false,verdict:'incomplet'};
  const minutes=offer.approachMin+tripMin, hour=60*offer.price/minutes;
  const km=offer.price/(offer.approachKm+offer.tripKm);
- const grade=hour<22.5?'MAUVAIS':hour<25?'MOYEN':'BON';
+ const grade=hour<20?'MAUVAIS':hour<25?'MOYEN':'BON';
  const icon=grade==='BON'?'🟢':grade==='MOYEN'?'🟠':'🔴';
  const fmt=(n,d=1)=>n.toFixed(d).replace('.',',');
  return {...base,show:true,title:icon+' '+grade+' · '+fmt(hour)+' €/h',
@@ -291,8 +291,7 @@ async function runAnalyzeTraffic(rt, input) {
     const hourlyOk = hourly >= target;
     // Three immediate outcomes. The local km threshold can downgrade "BON" to "MOYEN".
     // A marginal hourly outcome is never promoted by a favorable km rate.
-    const grade = hourly < target * 0.90 ? 'MAUVAIS'
-      : hourly < target || kmWeak || kmRate === null ? 'MOYEN' : 'BON';
+    const grade = hourly < 20 ? 'MAUVAIS' : hourly < target ? 'MOYEN' : 'BON';
     const symbol = grade === 'BON' ? '🟢' : grade === 'MOYEN' ? '🟠' : '🔴';
     const fmt = n => n.toFixed(1).replace('.', ',');
     const title = `${symbol} ${grade} · ${fmt(hourly)} €/h`;
