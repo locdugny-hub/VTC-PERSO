@@ -114,6 +114,23 @@ function compactFallback(base) {
 }
 
 // Screenshot offer formats may come from video screenshots, not just native Uber UI.
+// Work only on the offer text, never on map names or iOS chrome.
+function offerCardText(raw) {
+ const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const approach=lines.findIndex(x=>/(?:<\s*1|\d{1,3})\s*min\s*(?:[·•(]|\s*·)/i.test(x)&&/(?:km|\d+\s*m\b)/i.test(x));
+ if(approach<0)return '';
+ const prices=lines.map((x,i)=>({x,i})).filter(o=>/€/.test(o.x)&&!/\b(?:toll|fee|péage|bonus)\b/i.test(o.x));
+ // The offer price can be before or after approach. Prefer a labelled net payout.
+ const best=prices.sort((a,b)=>{
+  const score=p=>(/\bnet\b|ttc|montant net/i.test(p.x)?100:0)-Math.abs(p.i-approach)*3;
+  return score(b)-score(a);
+ })[0];
+ if(!best||Math.abs(best.i-approach)>15)return '';
+ const first=Math.max(0,Math.min(approach,best.i)-2);
+ let last=lines.findIndex((x,i)=>i>Math.max(approach,best.i)&&/^(?:accepter|accept|refuser|decline|mise en relation)$/i.test(x));
+ if(last<0)last=lines.length;
+ return lines.slice(first,last).join('\n');
+}
 function parseVideoOffer(raw) {
  const t=String(raw||'').replace(/\u00a0/g,' ').replace(/[•·]/g,' · ');
  const lines=t.replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
@@ -200,11 +217,12 @@ async function runAnalyzeTraffic(rt, input) {
       : raw;
     input = { ...input, text: labeled };
     const base = runAnalyze(rt, input);
-    const offer = parseVideoOffer(raw);
+    const cardText = offerCardText(raw);
+    const offer = parseVideoOffer(cardText);
     if (offer) {
       base.speak = !!rt.readJson('config.json')?.voice;
-      if (/\b(?:Barcelona|Spain|Espagne)\b/i.test((videoPair(raw)?.destination)||'')) return {...base,show:true,title:'⚪ HORS ZONE',body:'Destination hors zone TomTom configurée',speech:'',speak:false,verdict:'incomplet'};
-      const pair = videoPair(raw) || extractUberAddresses(raw);
+      if (/\b(?:Barcelona|Spain|Espagne)\b/i.test((videoPair(cardText)?.destination)||'')) return {...base,show:true,title:'⚪ HORS ZONE',body:'Destination hors zone TomTom configurée',speech:'',speak:false,verdict:'incomplet'};
+      const pair = videoPair(cardText) || extractUberAddresses(cardText);
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
       if (pair && rt.hasToken()) {
