@@ -169,6 +169,8 @@ async function runAnalyzeTraffic(rt, input) {
       if (offer.tripMin !== null) return videoVerdict(base, offer, offer.tripMin, false);
       if (pair && rt.hasToken()) {
         const route = await rt.trafficRoute(pair.pickup, pair.destination);
+        if (route?.error)
+          return {...base,show:true,title:'⚪ TOMTOM LIMITÉ',body:route.error==='quota_journalier'?'Quota gratuit atteint':'Trop de demandes',speech:'',speak:false,verdict:'incomplet'};
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
           return videoVerdict(base, offer, route.trip_minutes, true);
       }
@@ -2026,6 +2028,8 @@ function createRuntime() {
             req.body = JSON.stringify({ pickup, destination });
             try {
                 const data = await req.loadJSON();
+                if (req.response.statusCode === 429)
+                    return { error: data?.error === 'daily_free_limit' ? 'quota_journalier' : 'trop_de_demandes' };
                 if (req.response.statusCode !== 200 || !Number.isFinite(data.trip_minutes) || !Number.isFinite(data.trip_km))
                     return null;
                 return { trip_minutes: data.trip_minutes, trip_km: data.trip_km, traffic_delay_minutes: data.traffic_delay_minutes ?? null };
