@@ -223,6 +223,39 @@ function boltGreenOffer(card) {
  if(!pickup||!destination||pickup===destination||!Number.isFinite(price)||!Number.isFinite(tripKm)||tripKm<=0)return null;
  return {offer:{price,approachMin,approachKm,tripKm,tripMin:null},pair:{pickup,destination}};
 }
+// VTC Perso V2 – profil géographique prudent : pas de demande présumée ni de durée inventée.
+function strategicHint(pickup,destination,price,hour,input) {
+ const clean=t=>String(t||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,' ').replace(/\s+/g,' ');
+ const p=clean(pickup),d=clean(destination);
+ const ts=Date.parse(input?.t0||'')||Date.now(),date=new Date(ts);
+ const weekday=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Paris',weekday:'short'}).format(date);
+ const weekend=weekday==='Sat'||weekday==='Sun';
+ const clock=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',hourCycle:'h23'}).format(date);
+ const hh=Number(clock);
+ const home=/romainville|bagnolet|les lilas|pre[- ]saint[- ]gervais|montreuil|rosny[- ]sous[- ]bois|fontenay[- ]sous[- ]bois|vincennes|noisy[- ]le[- ]sec|villemomble|nogent[- ]sur[- ]marne|le perreux/.test(d);
+ const south=/\b(?:75005|75006|75007|75013|75014|75015)\b|\b(?:paris\s*(?:5e|6e|7e|13e|14e|15e)|(?:5e|6e|7e|13e|14e|15e)\s*arrondissement)\b|montparnasse|saint[- ]germain[- ]des[- ]pres|quartier latin|porte de bercy|charenton[- ]le[- ]pont/.test(d);
+ const risk=/barbes|gare du nord|\b75010\b|\b75018\b|\bparis\s*(?:10e|18e)\b/.test(d);
+ const outbound=/\b(?:75005|75006|75007|75013|75014|75015)\b|montparnasse|saint[- ]germain/.test(p);
+ const explicitWork=!weekend&&hh>=19&&hh<23;
+ const returnTime=!weekend&&(hh>=23||hh<3);
+ let hint='',downgrade=false;
+ if(returnTime&&home)hint='🏠 Direction domicile';
+ else if(risk) {hint='⚠ Zone peu privilégiée';downgrade=hour>=25&&hour<38;}
+ else if(explicitWork&&outbound&&!south&&!home&&hour>=25&&hour<33){hint='⚠ Sortie du bassin Paris sud';downgrade=true;}
+ else if(explicitWork&&south)hint='✓ Destination Paris sud';
+ else if(weekend&&home)hint='✓ Bassin Est parisien';
+ else if(!weekend&&hh>=19&&hh<23&&home)hint='↗ Bassin Est, vers Paris selon trajet';
+ return {hint,downgrade};
+}
+function applyStrategic(out,pair,offer,hour,input) {
+ if(!pair||!out||!out.show||!Number.isFinite(hour))return out;
+ const h=strategicHint(pair.pickup,pair.destination,offer.price,hour,input);
+ if(!h.hint)return out;
+ const grade=h.downgrade&&out.verdict==='bon'?'moyen':out.verdict;
+ const prefix=grade==='moyen'?'🟠 MOYEN':grade==='bon'?'🟢 BON':'🔴 MAUVAIS';
+ const title=grade===out.verdict?out.title:out.title.replace(/^[🟢🟠🔴]\s*(?:BON|MOYEN|MAUVAIS)/,prefix);
+ return {...out,title,body:out.body+' · '+h.hint,speech:grade===out.verdict?out.speech:grade+' - '+Math.round(hour)+' euros de l’heure, destination à surveiller',verdict:grade};
+}
 function videoVerdict(base, offer, tripMin, hasTraffic) {
  if(!Number.isFinite(tripMin)||tripMin<=0)return { ...base,show:true,title:'⚪ INCOMPLET',body:'Durée trajet indisponible',speech:'',speak:false,verdict:'incomplet'};
  const minutes=offer.approachMin+tripMin, hour=60*offer.price/minutes;
@@ -256,7 +289,7 @@ async function runAnalyzeTraffic(rt, input) {
         if (route?.error)
           return {...base,show:true,title:'⚪ INCOMPLET',body:({quota_journalier:'Quota journalier',trop_de_demandes:'Limite de débit',geocodage:'Lieu non reconnu par TomTom',serveur:'Erreur serveur TomTom',delai_reseau:'Délai réseau dépassé',invalid_addresses:'Adresses OCR invalides'})[route.error]||'TomTom indisponible',speech:'',speak:false,verdict:'incomplet'};
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
-          return videoVerdict(base, offer, route.trip_minutes, true);
+          return applyStrategic(videoVerdict(base, offer, route.trip_minutes, true),pair,offer,60*offer.price/(offer.approachMin+route.trip_minutes),input);
       }
       return {...base,show:true,title:'⚪ INCOMPLET',body:!pair?'Lieux non lus (v-BOLT-3)':!rt.hasToken()?'Jeton absent':route?.trip_km != null ? 'TomTom ' + String(route.trip_km).replace('.',',') + ' km / offre ' + String(offer.tripKm).replace('.',',') + ' km' : 'Distance TomTom inconnue',speech:'',speak:false,verdict:'incomplet'};
     }
@@ -297,7 +330,7 @@ async function runAnalyzeTraffic(rt, input) {
     const title = `${symbol} ${grade} · ${fmt(hourly)} €/h`;
     const body = `${price.toFixed(2).replace('.', ',')} € · ${minutes} min · ${kmRate === null ? '€/km —' : kmRate.toFixed(2).replace('.', ',') + ' €/km'}`;
     // Keep complete analysis in the local journal, only shorten the real-time alert.
-    return { ...base, title, body, speech: grade.toLowerCase() + ' - ' + Math.round(hourly) + ' euros de l’heure', verdict: grade.toLowerCase(), speak: !!cfg.voice };
+    return applyStrategic({ ...base, title, body, speech: grade.toLowerCase() + ' - ' + Math.round(hourly) + ' euros de l’heure', verdict: grade.toLowerCase(), speak: !!cfg.voice },pair,{price},hourly,input);
 }
 /** Appelé après l'affichage : enregistre l'instant de restitution (mesure) ; synchronise si demandé. */
 async function runPost(rt, input) {
