@@ -101,6 +101,28 @@ function extractUberAddresses(text) {
     }
     return found.length>=2 && found[0]!==found[1] ? {pickup:found[0],destination:found[1]} : null;
 }
+// Landmark fallback for Uber offers with a numbered pickup and a named destination.
+function extractUberLandmarkPair(text) {
+ const lines=String(text||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean);
+ const trip=lines.findIndex(x=>/^(?:[□■•·\s]*)course\s+de\s+\d+(?:[.,]\d+)?\s*km\b/i.test(x));
+ if(trip<1)return null;
+ const street=/^\d{1,4}\s+(?:bis\s+)?(?:rue|avenue|av\.?|boulevard|bd\.?|place|allée|allee|chemin|route|quai|impasse|passage|cours)\s+/i;
+ let pickup='';
+ for(let i=trip-1;i>=0&&i>=trip-4;i--){
+  if(street.test(lines[i])){pickup=lines.slice(i,trip).join(' ');break;}
+ }
+ if(!pickup||!/\b\d{5}\b/.test(pickup))return null;
+ const tail=[];
+ for(let i=trip+1;i<Math.min(trip+4,lines.length);i++){
+  if(/^(?:accepter|mise en relation|refuser|exclusivité|uberx)/i.test(lines[i]))break;
+  if(!lines[i]||/€|^course\s+de/i.test(lines[i]))break;
+  tail.push(lines[i]);
+  if(/\b\d{5}\b/.test(lines[i]))break;
+ }
+ const destination=tail.join(' ').trim();
+ if(destination.length<6||destination===pickup)return null;
+ return {pickup,destination};
+}
 function compactFallback(base) {
     if (!base || !base.show) return base;
     const v = String(base.verdict ?? '').toLowerCase();
@@ -283,7 +305,7 @@ async function runAnalyzeTraffic(rt, input) {
     const offer = boltCard?.offer || parseVideoOffer(cardText);
     if (offer) {
       base.speak = !!rt.readJson('config.json')?.voice;
-      const pair = boltCard?.pair || videoPair(cardText) || extractUberAddresses(cardText);
+      const pair = boltCard?.pair || videoPair(cardText) || extractUberAddresses(cardText) || extractUberLandmarkPair(cardText);
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
       if (pair && rt.hasToken()) {
@@ -297,7 +319,7 @@ async function runAnalyzeTraffic(rt, input) {
     }
     if (!base.show || !rt.hasToken())
         return compactFallback(base);
-    const pair = extractUberAddresses(input.text ?? '');
+    const pair = extractUberAddresses(input.text ?? '') || extractUberLandmarkPair(input.text ?? '');
     if (!pair)
         return compactFallback(base);
     const cfg = rt.readJson('config.json');
@@ -2143,7 +2165,13 @@ function createRuntime() {
             req.method = 'POST';
             req.timeoutInterval = 11;
             req.headers = { 'content-type': 'application/json', 'x-device-token': Keychain.get(TOKEN_KEY) };
-            const normalizePlace = value => String(value ?? '').replace(/[<>]/g, ' ').replace(/[\u0000-\u001f]/g, ' ').replace(/\s+/g, ' ').trim();
+            const normalizePlace = value => {
+                const v=String(value ?? '').replace(/[<>]/g, ' ').replace(/[\u0000-\u001f]/g, ' ').replace(/\s+/g, ' ').trim();
+                if (/^gare\s+du\s+nord(?:\s*,?\s*(?:75010|paris))*$/i.test(v)) return '18 Rue de Dunkerque, 75010 Paris, France';
+                if (/^gare\s+de\s+lyon(?:\s*,?\s*(?:75012|paris))*$/i.test(v)) return 'Place Louis-Armand, 75012 Paris, France';
+                if (/^gare\s+montparnasse(?:\s*,?\s*(?:75015|paris))*$/i.test(v)) return '17 Boulevard de Vaugirard, 75015 Paris, France';
+                return v;
+            };
             req.body = JSON.stringify({ pickup: normalizePlace(pickup), destination: normalizePlace(destination) });
             try {
                 const data = await req.loadJSON();
