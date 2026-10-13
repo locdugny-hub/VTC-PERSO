@@ -285,7 +285,7 @@ function withReposition(out,route,offer,minutes) {
  const fmt=n=>n.toFixed(1).replace('.',',');
  // Keep the primary line compact: iOS truncates long notification bodies.
  const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
- const warning=/Zone peu privilégiée|Sortie du bassin/.test(out.body)?' · ⚠ zone':'';
+ const warning=/Zone peu privilégiée/.test(out.body)?' · ⚠ secteur à éviter':/Sortie du bassin/.test(out.body)?' · ⚠ hors Paris sud':'';
  return {...out,body:base+' · ↩'+rep.minutes+'min · ajusté '+fmt(adjusted)+'€/h'+warning};
 }
 function applyStrategic(out,pair,offer,hour,input) {
