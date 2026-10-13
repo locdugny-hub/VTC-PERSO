@@ -253,7 +253,7 @@ function applyStrategic(out,pair,offer,hour,input) {
  if(!h.hint)return out;
  const grade=h.downgrade&&out.verdict==='bon'?'moyen':out.verdict;
  const prefix=grade==='moyen'?'🟠 MOYEN':grade==='bon'?'🟢 BON':'🔴 MAUVAIS';
- const title=grade===out.verdict?out.title:out.title.replace(/^[🟢🟠🔴]\s*(?:BON|MOYEN|MAUVAIS)/,prefix);
+ const title=grade===out.verdict?out.title:out.title.replace(/^(?:🟢|🟠|🔴)\s*(?:BON|MOYEN|MAUVAIS)/u,prefix);
  return {...out,title,body:out.body+' · '+h.hint,speech:grade===out.verdict?out.speech:grade+' - '+Math.round(hour)+' euros de l’heure, destination à surveiller',verdict:grade};
 }
 function videoVerdict(base, offer, tripMin, hasTraffic) {
