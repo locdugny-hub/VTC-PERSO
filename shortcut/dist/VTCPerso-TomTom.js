@@ -271,6 +271,20 @@ function strategicHint(pickup,destination,price,hour,input) {
  else if(!weekend&&hh>=19&&hh<23&&home)hint='↗ Bassin Est, vers Paris selon trajet';
  return {hint,downgrade};
 }
+function requestReposition(pair,input) {
+ if(!pair)return false;
+ const d=String(pair.destination||'').toLowerCase();
+ // Keep latency minimal: only request when geography is potentially costly.
+ const h=strategicHint(pair.pickup,pair.destination,0,30,input);
+ return h.downgrade || /gare du nord|barb[eè]s|75010|75018/i.test(d) || !/paris|750\d\d|romainville|montreuil|bagnolet|charenton|vincennes|rosny|fontenay|lilas|noisy-le-sec/i.test(d);
+}
+function withReposition(out,route,offer,minutes) {
+ const rep=route?.reposition;
+ if(!rep||!Number.isFinite(rep.minutes)||rep.minutes<=0||!Number.isFinite(minutes)||minutes<=0)return out;
+ const adjusted=60*offer.price/(minutes+rep.minutes);
+ const fmt=n=>n.toFixed(1).replace('.',',');
+ return {...out,body:out.body+' · ↩ '+rep.minutes+' min → '+rep.target+' · ajusté '+fmt(adjusted)+' €/h'};
+}
 function applyStrategic(out,pair,offer,hour,input) {
  if(!pair||!out||!out.show||!Number.isFinite(hour))return out;
  const h=strategicHint(pair.pickup,pair.destination,offer.price,hour,input);
@@ -309,11 +323,11 @@ async function runAnalyzeTraffic(rt, input) {
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
       if (pair && rt.hasToken()) {
-        const route = await rt.trafficRoute(pair.pickup, pair.destination);
+        const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input));
         if (route?.error)
           return {...base,show:true,title:'⚪ INCOMPLET',body:({quota_journalier:'Quota journalier',trop_de_demandes:'Limite de débit',geocodage:'Lieu non reconnu par TomTom',serveur:'Erreur serveur TomTom',delai_reseau:'Délai réseau dépassé',invalid_addresses:'Adresses OCR invalides'})[route.error]||'TomTom indisponible',speech:'',speak:false,verdict:'incomplet'};
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
-          return applyStrategic(videoVerdict(base, offer, route.trip_minutes, true),pair,offer,60*offer.price/(offer.approachMin+route.trip_minutes),input);
+          return withReposition(applyStrategic(videoVerdict(base, offer, route.trip_minutes, true),pair,offer,60*offer.price/(offer.approachMin+route.trip_minutes),input),route,offer,offer.approachMin+route.trip_minutes);
       }
       return {...base,show:true,title:'⚪ INCOMPLET',body:!pair?'Lieux non lus (v-BOLT-3)':!rt.hasToken()?'Jeton absent':route?.trip_km != null ? 'TomTom ' + String(route.trip_km).replace('.',',') + ' km / offre ' + String(offer.tripKm).replace('.',',') + ' km' : 'Distance TomTom inconnue',speech:'',speak:false,verdict:'incomplet'};
     }
@@ -354,7 +368,7 @@ async function runAnalyzeTraffic(rt, input) {
     const title = `${symbol} ${grade} · ${fmt(hourly)} €/h`;
     const body = `${price.toFixed(2).replace('.', ',')} € · ${minutes} min · ${kmRate === null ? '€/km —' : kmRate.toFixed(2).replace('.', ',') + ' €/km'}`;
     // Keep complete analysis in the local journal, only shorten the real-time alert.
-    return applyStrategic({ ...base, title, body, speech: grade.toLowerCase() + ' - ' + Math.round(hourly) + ' euros de l’heure', verdict: grade.toLowerCase(), speak: !!cfg.voice },pair,{price},hourly,input);
+    return withReposition(applyStrategic({ ...base, title, body, speech: grade.toLowerCase() + ' - ' + Math.round(hourly) + ' euros de l’heure', verdict: grade.toLowerCase(), speak: !!cfg.voice },pair,{price},hourly,input),route,{price},minutes);
 }
 /** Appelé après l'affichage : enregistre l'instant de restitution (mesure) ; synchronise si demandé. */
 async function runPost(rt, input) {
@@ -2158,7 +2172,7 @@ function createRuntime() {
         pasteboard: () => Pasteboard.paste(),
         setToken: (t) => Keychain.set(TOKEN_KEY, t),
         hasToken: () => Keychain.contains(TOKEN_KEY),
-        async trafficRoute(pickup, destination) {
+        async trafficRoute(pickup, destination, reposition = false) {
             if (!Keychain.contains(TOKEN_KEY))
                 return null;
             const req = new Request('https://vihzevndxgwetrwtaexp.supabase.co/functions/v1/device-traffic');
@@ -2172,7 +2186,7 @@ function createRuntime() {
                 if (/^gare\s+montparnasse(?:\s*,?\s*(?:75015|paris))*$/i.test(v)) return '17 Boulevard de Vaugirard, 75015 Paris, France';
                 return v;
             };
-            req.body = JSON.stringify({ pickup: normalizePlace(pickup), destination: normalizePlace(destination) });
+            req.body = JSON.stringify({ pickup: normalizePlace(pickup), destination: normalizePlace(destination), reposition: !!reposition });
             try {
                 const data = await req.loadJSON();
                 if (req.response.statusCode === 400) return { error: 'invalid_addresses' };
@@ -2180,7 +2194,7 @@ function createRuntime() {
                     return { error: data?.error === 'daily_free_limit' ? 'quota_journalier' : 'trop_de_demandes' };
                 if (req.response.statusCode !== 200 || !Number.isFinite(data.trip_minutes) || !Number.isFinite(data.trip_km))
                     return { error: data?.error === 'routing_unavailable' ? 'geocodage' : 'serveur' };
-                return { trip_minutes: data.trip_minutes, trip_km: data.trip_km, traffic_delay_minutes: data.traffic_delay_minutes ?? null };
+                return { trip_minutes: data.trip_minutes, trip_km: data.trip_km, traffic_delay_minutes: data.traffic_delay_minutes ?? null, reposition: data.reposition ?? null };
             }
             catch {
                 return { error: 'delai_reseau' };
