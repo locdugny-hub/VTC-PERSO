@@ -229,9 +229,11 @@ function strategicHint(pickup,destination,price,hour,input) {
  const p=clean(pickup),d=clean(destination);
  const ts=Date.parse(input?.t0||'')||Date.now(),date=new Date(ts);
  const weekday=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Paris',weekday:'short'}).format(date);
- const weekend=weekday==='Sat'||weekday==='Sun';
  const clock=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',hourCycle:'h23'}).format(date);
- const hh=Number(clock);
+ // testScenario is optional and intended only for the separate photo-test Shortcut.
+ const scenario=['soir','retour','weekend'].includes(input?.testScenario)?input.testScenario:'';
+ const weekend=scenario==='weekend'||(!scenario&&(weekday==='Sat'||weekday==='Sun'));
+ const hh=scenario==='soir'?21:scenario==='retour'?23:scenario==='weekend'?17:Number(clock);
  const home=/romainville|bagnolet|les lilas|pre[- ]saint[- ]gervais|montreuil|rosny[- ]sous[- ]bois|fontenay[- ]sous[- ]bois|vincennes|noisy[- ]le[- ]sec|villemomble|nogent[- ]sur[- ]marne|le perreux/.test(d);
  const south=/\b(?:75005|75006|75007|75013|75014|75015)\b|\b(?:paris\s*(?:5e|6e|7e|13e|14e|15e)|(?:5e|6e|7e|13e|14e|15e)\s*arrondissement)\b|montparnasse|saint[- ]germain[- ]des[- ]pres|quartier latin|porte de bercy|charenton[- ]le[- ]pont/.test(d);
  const risk=/barbes|gare du nord|\b75010\b|\b75018\b|\bparis\s*(?:10e|18e)\b/.test(d);
