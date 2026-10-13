@@ -339,7 +339,7 @@ async function runAnalyzeTraffic(rt, input) {
     const cfg = rt.readJson('config.json');
     if (!cfg)
         return compactFallback(base);
-    const route = await rt.trafficRoute(pair.pickup, pair.destination);
+    const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input));
     if (!route)
         return compactFallback(base);
     const latest = rt.readJson('latest.json');
