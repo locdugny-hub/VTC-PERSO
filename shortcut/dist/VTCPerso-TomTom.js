@@ -281,6 +281,7 @@ function requestReposition(pair,input) {
 function withReposition(out,route,offer,minutes) {
  const rep=route?.reposition;
  if(!rep||!Number.isFinite(rep.minutes)||rep.minutes<=0||!Number.isFinite(minutes)||minutes<=0)return out;
+ if(rep.minutes>=25)return {...out,body:String(out.body||'').split(' · ').slice(0,2).join(' · ')+' · ⚠ reprise éloignée (estimation)'};
  const adjusted=60*offer.price/(minutes+rep.minutes);
  const fmt=n=>n.toFixed(1).replace('.',',');
  // Keep the primary line compact: iOS truncates long notification bodies.
