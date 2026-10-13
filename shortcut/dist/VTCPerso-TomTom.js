@@ -283,7 +283,10 @@ function withReposition(out,route,offer,minutes) {
  if(!rep||!Number.isFinite(rep.minutes)||rep.minutes<=0||!Number.isFinite(minutes)||minutes<=0)return out;
  const adjusted=60*offer.price/(minutes+rep.minutes);
  const fmt=n=>n.toFixed(1).replace('.',',');
- return {...out,body:out.body+' · ↩ '+rep.minutes+' min → '+rep.target+' · ajusté '+fmt(adjusted)+' €/h'};
+ // Keep the primary line compact: iOS truncates long notification bodies.
+ const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
+ const warning=/Zone peu privilégiée|Sortie du bassin/.test(out.body)?' · ⚠ zone':'';
+ return {...out,body:base+' · ↩'+rep.minutes+'min · ajusté '+fmt(adjusted)+'€/h'+warning};
 }
 function applyStrategic(out,pair,offer,hour,input) {
  if(!pair||!out||!out.show||!Number.isFinite(hour))return out;
