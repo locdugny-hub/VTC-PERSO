@@ -288,7 +288,7 @@ function requestReposition(pair,input) {
  const d=String(pair.destination||'').toLowerCase();
  // Keep latency minimal: only request when geography is potentially costly.
  const h=strategicHint(pair.pickup,pair.destination,0,30,input);
- return h.downgrade || /gare du nord|barb[eè]s|75010|75018/i.test(d) || !/paris|750\d\d|romainville|montreuil|bagnolet|charenton|vincennes|rosny|fontenay|lilas|noisy-le-sec/i.test(d);
+ return /disneyland|disney\s*paris|coupvray|77700|chessy|val d.europe|aéroport|airport|roissy|charles.de.gaulle|\bcdg\b|orly/i.test(d) || h.downgrade || /gare du nord|barb[eè]s|75010|75018/i.test(d) || !/paris|750\d\d|romainville|montreuil|bagnolet|charenton|vincennes|rosny|fontenay|lilas|noisy-le-sec/i.test(d);
 }
 function withReposition(out,route,offer,minutes) {
  const rep=route?.reposition;
