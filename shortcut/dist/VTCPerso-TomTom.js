@@ -292,7 +292,12 @@ function requestReposition(pair,input) {
 }
 function withReposition(out,route,offer,minutes) {
  const rep=route?.reposition;
- if(!rep||!Number.isFinite(rep.minutes)||rep.minutes<=0||!Number.isFinite(minutes)||minutes<=0)return out;
+ if(!rep||!Number.isFinite(rep.minutes)||!Number.isFinite(minutes)||minutes<=0)return out;
+ if(rep.minutes===0&&rep.method==='near_basin'&&typeof rep.target==='string'){
+   const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
+   return {...out,body:base+' · Reprise proche : '+rep.target+' (estim.)'};
+ }
+ if(rep.minutes<=0)return out;
  if(rep.minutes>=25)return {...out,body:String(out.body||'').split(' · ').slice(0,2).join(' · ')+' · ⚠ reprise éloignée (estimation)'};
  const adjusted=60*offer.price/(minutes+rep.minutes);
  const fmt=n=>n.toFixed(1).replace('.',',');
