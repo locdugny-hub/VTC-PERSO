@@ -293,7 +293,7 @@ function requestReposition(pair,input) {
 function withReposition(out,route,offer,minutes) {
  const rep=route?.reposition;
  if(!rep||!Number.isFinite(rep.minutes)){
-   if(/Zone peu privilégiée|Sortie du bassin/.test(String(out?.body||''))){
+   if((Number(offer?.tripKm)>=30 || Number(route?.trip_km)>=30 || /Zone peu privilégiée|Sortie du bassin/.test(String(out?.body||'')))){
      const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
      return {...out,body:base+' · ⚠ reprise non estimée'};
    }
