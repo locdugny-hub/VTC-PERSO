@@ -306,7 +306,7 @@ function withReposition(out,route,offer,minutes) {
    return {...out,body:base+' · '+warning+'↩ '+rep.target+' (estim.)'};
  }
  if(rep.minutes<=0)return out;
- if(rep.minutes>=25)return {...out,body:String(out.body||'').split(' · ').slice(0,2).join(' · ')+' · ⚠ reprise éloignée (estimation)'};
+ if(rep.minutes>=25){const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');const adjusted=(60*offer.price/(minutes+rep.minutes)).toFixed(1).replace('.',',');const target=String(rep.target||'secteur').slice(0,18);return {...out,body:base+' · ↩'+rep.minutes+'min '+target+' (estim.) · ajusté '+adjusted+'€/h'};}
  const adjusted=60*offer.price/(minutes+rep.minutes);
  const fmt=n=>n.toFixed(1).replace('.',',');
  // Keep the primary line compact: iOS truncates long notification bodies.
