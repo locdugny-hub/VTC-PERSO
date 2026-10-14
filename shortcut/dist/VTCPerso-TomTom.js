@@ -313,7 +313,8 @@ function withReposition(out,route,offer,minutes) {
  if(rep.minutes===0&&rep.method==='near_basin'&&typeof rep.target==='string'){
    const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
    const warning=/Zone peu privilégiée/.test(out.body)?'⚠ secteur à éviter · ':/Sortie du bassin/.test(out.body)?'⚠ hors Paris sud · ':'';
-   return {...out,body:base+' · '+warning+'↩ '+rep.target+' (estim.)'};
+   const idx=Number(rep.index?.score);const suffix=Number.isFinite(idx)?' · repère '+idx+'/100 (indic.)':'';
+   return {...out,body:base+' · '+warning+'↩ '+rep.target+suffix};
  }
  if(rep.minutes<=0)return out;
  if(rep.minutes>=25){const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');const adjusted=(60*offer.price/(minutes+rep.minutes)).toFixed(1).replace('.',',');const target=String(rep.target||'secteur').slice(0,18);return capAdjustedVerdict({...out,body:base+' · ↩'+rep.minutes+'min '+target+' (estim.) · ajusté '+adjusted+'€/h'},60*offer.price/(minutes+rep.minutes));}
