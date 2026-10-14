@@ -271,6 +271,18 @@ function strategicHint(pickup,destination,price,hour,input) {
  else if(!weekend&&hh>=19&&hh<23&&home)hint='↗ Bassin Est, vers Paris selon trajet';
  return {hint,downgrade};
 }
+function repositionContext(input) {
+ const scenario=String(input?.testScenario||'');
+ if(scenario==='retour')return 'return';
+ if(scenario==='weekend')return 'weekend';
+ if(scenario==='soir')return 'work';
+ const date=new Date(Date.parse(input?.t0||'')||Date.now());
+ const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Paris',weekday:'short',hour:'2-digit',hourCycle:'h23'}).formatToParts(date);
+ const day=parts.find(p=>p.type==='weekday')?.value;
+ const hour=Number(parts.find(p=>p.type==='hour')?.value);
+ if(day==='Sat'||day==='Sun')return 'weekend';
+ return (hour>=23||hour<3)?'return':'work';
+}
 function requestReposition(pair,input) {
  if(!pair)return false;
  const d=String(pair.destination||'').toLowerCase();
@@ -327,7 +339,7 @@ async function runAnalyzeTraffic(rt, input) {
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
       if (pair && rt.hasToken()) {
-        const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input));
+        const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input), repositionContext(input));
         if (route?.error)
           return {...base,show:true,title:'⚪ INCOMPLET',body:({quota_journalier:'Quota journalier',trop_de_demandes:'Limite de débit',geocodage:'Lieu non reconnu par TomTom',serveur:'Erreur serveur TomTom',delai_reseau:'Délai réseau dépassé',invalid_addresses:'Adresses OCR invalides'})[route.error]||'TomTom indisponible',speech:'',speak:false,verdict:'incomplet'};
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
@@ -343,7 +355,7 @@ async function runAnalyzeTraffic(rt, input) {
     const cfg = rt.readJson('config.json');
     if (!cfg)
         return compactFallback(base);
-    const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input));
+    const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input), repositionContext(input));
     if (!route)
         return compactFallback(base);
     const latest = rt.readJson('latest.json');
@@ -2176,7 +2188,7 @@ function createRuntime() {
         pasteboard: () => Pasteboard.paste(),
         setToken: (t) => Keychain.set(TOKEN_KEY, t),
         hasToken: () => Keychain.contains(TOKEN_KEY),
-        async trafficRoute(pickup, destination, reposition = false) {
+        async trafficRoute(pickup, destination, reposition = false, reposition_context = 'work') {
             if (!Keychain.contains(TOKEN_KEY))
                 return null;
             const req = new Request('https://vihzevndxgwetrwtaexp.supabase.co/functions/v1/device-traffic');
@@ -2190,7 +2202,7 @@ function createRuntime() {
                 if (/^gare\s+montparnasse(?:\s*,?\s*(?:75015|paris))*$/i.test(v)) return '17 Boulevard de Vaugirard, 75015 Paris, France';
                 return v;
             };
-            req.body = JSON.stringify({ pickup: normalizePlace(pickup), destination: normalizePlace(destination), reposition: !!reposition });
+            req.body = JSON.stringify({ pickup: normalizePlace(pickup), destination: normalizePlace(destination), reposition: !!reposition, reposition_context });
             try {
                 const data = await req.loadJSON();
                 if (req.response.statusCode === 400) return { error: 'invalid_addresses' };
