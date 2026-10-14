@@ -290,6 +290,16 @@ function requestReposition(pair,input) {
  const h=strategicHint(pair.pickup,pair.destination,0,30,input);
  return /disneyland|disney\s*paris|coupvray|77700|chessy|val d.europe|aéroport|airport|roissy|charles.de.gaulle|\bcdg\b|orly/i.test(d) || h.downgrade || /gare du nord|barb[eè]s|75010|75018/i.test(d) || !/paris|750\d\d|romainville|montreuil|bagnolet|charenton|vincennes|rosny|fontenay|lilas|noisy-le-sec/i.test(d);
 }
+function capAdjustedVerdict(out,adjusted) {
+ if(!Number.isFinite(adjusted))return out;
+ const current=String(out.verdict||'').toLowerCase();
+ if(current!=='bon'&&current!=='moyen')return out;
+ const grade=adjusted<20?'mauvais':adjusted<25?'moyen':'bon';
+ if(grade==='bon'||(grade==='moyen'&&current==='moyen'))return out;
+ const label=grade==='mauvais'?'🔴 MAUVAIS':'🟠 MOYEN';
+ return {...out,verdict:grade,title:String(out.title||'').replace(/^(?:🟢|🟠|🔴)\s*(?:BON|MOYEN|MAUVAIS)/u,label),
+ speech:grade==='mauvais'?'Mauvais, reprise estimée non rentable': 'Moyen, reprise estimée sous objectif'};
+}
 function withReposition(out,route,offer,minutes) {
  const rep=route?.reposition;
  if(!rep||!Number.isFinite(rep.minutes)){
@@ -306,13 +316,13 @@ function withReposition(out,route,offer,minutes) {
    return {...out,body:base+' · '+warning+'↩ '+rep.target+' (estim.)'};
  }
  if(rep.minutes<=0)return out;
- if(rep.minutes>=25){const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');const adjusted=(60*offer.price/(minutes+rep.minutes)).toFixed(1).replace('.',',');const target=String(rep.target||'secteur').slice(0,18);return {...out,body:base+' · ↩'+rep.minutes+'min '+target+' (estim.) · ajusté '+adjusted+'€/h'};}
+ if(rep.minutes>=25){const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');const adjusted=(60*offer.price/(minutes+rep.minutes)).toFixed(1).replace('.',',');const target=String(rep.target||'secteur').slice(0,18);return capAdjustedVerdict({...out,body:base+' · ↩'+rep.minutes+'min '+target+' (estim.) · ajusté '+adjusted+'€/h'},60*offer.price/(minutes+rep.minutes));}
  const adjusted=60*offer.price/(minutes+rep.minutes);
  const fmt=n=>n.toFixed(1).replace('.',',');
  // Keep the primary line compact: iOS truncates long notification bodies.
  const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
  const warning=/Zone peu privilégiée/.test(out.body)?' · ⚠ secteur à éviter':/Sortie du bassin/.test(out.body)?' · ⚠ hors Paris sud':'';
- return {...out,body:base+' · ↩'+rep.minutes+'min · ajusté '+fmt(adjusted)+'€/h'+warning};
+ return capAdjustedVerdict({...out,body:base+' · ↩'+rep.minutes+'min · ajusté '+fmt(adjusted)+'€/h'+warning},adjusted);
 }
 function applyStrategic(out,pair,offer,hour,input) {
  if(!pair||!out||!out.show||!Number.isFinite(hour))return out;
