@@ -174,7 +174,7 @@ function parseVideoOffer(raw) {
  const approachMin=approach[1].includes('<')?1:Number(approach[1]); // conservative ceiling of <1 min
  const approachKm=approach[4]?Number(approach[4])/1000:Number((approach[2]||approach[3]).replace(',','.'));
  const course=t.match(/course\s+de\s+(\d+(?:[.,]\d+)?)\s*km/i);
- const durationPairs=[...t.matchAll(/(\d{1,3})\s*min\s*·\s*(\d+(?:[.,]\d+)?)\s*km/gi)];
+ const durationPairs=[...t.matchAll(/(\d{1,3})\s*min\s*(?:·\s*|\(\s*)(\d+(?:[.,]\d+)?)\s*km\s*\)?/gi)];
  let tripKm=course?Number(course[1].replace(',','.')):null;
  let tripMin=null;
  if(tripKm===null && durationPairs.length>1){tripMin=Number(durationPairs[1][1]);tripKm=Number(durationPairs[1][2].replace(',','.'));}
@@ -191,7 +191,7 @@ function parseVideoOffer(raw) {
 function videoPair(raw) {
  const lines=String(raw||'').replace(/\r/g,'').split('\n').map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
  const approachRe=/^[°º•·*\s]*(?:<\s*1|\d{1,3})\s*min\b.*(?:\d+(?:[.,]\d+)?\s*km|\d+\s*m)\b/i;
- const tripRe=/^[°º•·*\s]*(?:\d{1,3})\s*min\s*[·•]\s*\d+(?:[.,]\d+)?\s*km\b|^[°º•·*\s]*course\s+de\s+\d+(?:[.,]\d+)?\s*km\b/i;
+ const tripRe=/^[°º•·*\s]*(?:\d{1,3})\s*min\s*(?:[·•]\s*\d+(?:[.,]\d+)?\s*km\b|\(\s*\d+(?:[.,]\d+)?\s*km\s*\))|^[°º•·*\s]*course\s+de\s+\d+(?:[.,]\d+)?\s*km\b/i;
  const skip=/^(?:accepter|accept|refuser|decline|sur l.app|espèces|cash|forte demande|bolt\b|uber\b)/i;
  const readPlace=(start,end)=>{
   const out=[];
@@ -199,7 +199,7 @@ function videoPair(raw) {
    const l=lines[i];
    if(!l||tripRe.test(l)||approachRe.test(l)||skip.test(l)||/€|^\d+(?:[.,]\d+)?\s*km$/i.test(l))break;
    out.push(l);
-   if(/\b\d{5}\b/.test(l)&&!/-$/.test(l)&&!/,\s*$/.test(l)&&!/(?:Savigny|Paris)-$/i.test(l))break;
+   if(/\b\d{5}\b/.test(l)&&!/(?:\b\d{5}\s*,?\s*$|-$)/.test(l)&&!/,\s*$/.test(l))break;
   }
   return out.join(' ').replace(/-\s+(?=[a-zà-ÿ])/gi,'-').replace(/\s+([,])/g,'$1').replace(/\s*[·•]\s*$/,'').trim();
  };
