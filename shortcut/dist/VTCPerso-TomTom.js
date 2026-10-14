@@ -292,7 +292,14 @@ function requestReposition(pair,input) {
 }
 function withReposition(out,route,offer,minutes) {
  const rep=route?.reposition;
- if(!rep||!Number.isFinite(rep.minutes)||!Number.isFinite(minutes)||minutes<=0)return out;
+ if(!rep||!Number.isFinite(rep.minutes)){
+   if(/Zone peu privilégiée|Sortie du bassin/.test(String(out?.body||''))){
+     const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
+     return {...out,body:base+' · ⚠ reprise non estimée'};
+   }
+   return out;
+ }
+ if(!Number.isFinite(minutes)||minutes<=0)return out;
  if(rep.minutes===0&&rep.method==='near_basin'&&typeof rep.target==='string'){
    const base=String(out.body||'').split(' · ').slice(0,2).join(' · ');
    return {...out,body:base+' · Reprise proche : '+rep.target+' (estim.)'};
