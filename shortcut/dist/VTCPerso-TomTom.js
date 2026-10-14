@@ -352,7 +352,7 @@ async function runAnalyzeTraffic(rt, input) {
       // When a screenshot provides a trip time directly, evaluate it immediately.
       // For a distance-only offer, require a live TomTom route; never invent duration.
       if (pair && rt.hasToken()) {
-        const route = await rt.trafficRoute(pair.pickup, pair.destination, requestReposition(pair,input), repositionContext(input));
+        const route = await rt.trafficRoute(pair.pickup, pair.destination, (requestReposition(pair,input) || offer.tripKm>=30), repositionContext(input));
         if (route?.error)
           return {...base,show:true,title:'⚪ INCOMPLET',body:({quota_journalier:'Quota journalier',trop_de_demandes:'Limite de débit',geocodage:'Lieu non reconnu par TomTom',serveur:'Erreur serveur TomTom',delai_reseau:'Délai réseau dépassé',invalid_addresses:'Adresses OCR invalides'})[route.error]||'TomTom indisponible',speech:'',speak:false,verdict:'incomplet'};
         if(route && route.trip_km>0.40*offer.tripKm && route.trip_km<2.5*offer.tripKm)
