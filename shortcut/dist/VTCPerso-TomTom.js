@@ -297,7 +297,7 @@ function capAdjustedVerdict(out,adjusted) {
  const grade=adjusted<20?'mauvais':adjusted<25?'moyen':'bon';
  if(grade==='bon'||(grade==='moyen'&&current==='moyen'))return out;
  const label=grade==='mauvais'?'🔴 MAUVAIS':'🟠 MOYEN';
- return {...out,verdict:grade,title:String(out.title||'').replace(/^(?:🟢|🟠|🔴)\s*(?:BON|MOYEN|MAUVAIS)/u,label),
+ return {...out,verdict:grade,title:label+' · '+adjusted.toFixed(1).replace('.',',')+' €/h ajust.',
  speech:grade==='mauvais'?'Mauvais, reprise estimée non rentable': 'Moyen, reprise estimée sous objectif'};
 }
 function withReposition(out,route,offer,minutes) {
